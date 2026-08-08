@@ -1,0 +1,719 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		053C4284ABE85061CE9FE870 /* ComposerKeyPolicyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F2B97DCAC3D20270DAC6F08 /* ComposerKeyPolicyTests.swift */; };
+		07D3066A79BB02B02D334BC3 /* CodexAppServerClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5840A8804CE1A91301C7F019 /* CodexAppServerClient.swift */; };
+		12C6CD8F106958770761F918 /* ComposerTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09C2476E54F8F91399C6440B /* ComposerTextView.swift */; };
+		138ADA44A91793AE2EA1B489 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB0776F531FA2BBAE4ACAF6 /* ChatMessage.swift */; };
+		1BC0F181E29EC42F7B870DF4 /* OverlayFramePersistenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2329502B63422A02CDD12B67 /* OverlayFramePersistenceTests.swift */; };
+		1F832968C6A03FA3B97B95ED /* WorkingDirectoryPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A69DD07EA0E86F6F1C84077 /* WorkingDirectoryPreference.swift */; };
+		26BC74964655322900EF716B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 79DBB71119F13B9C1DBE6582 /* AppDelegate.swift */; };
+		29276178F7EDD5668FB6A62E /* WorkingDirectoryPreferenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 651D9ACC1593C31D1E3074BE /* WorkingDirectoryPreferenceTests.swift */; };
+		2B6AD7B51EE74BE64CE5BC12 /* AtmosphereCommandMapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1860F61D03438DA40F897CD8 /* AtmosphereCommandMapTests.swift */; };
+		2C026B162D5464E03DFEFE90 /* MicrophoneRecorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17026C63DFF407ED132B68A8 /* MicrophoneRecorder.swift */; };
+		2F70DAEFB6099610A2D75E0D /* DeepgramResponseParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E929E5860A91F5F61DBD24F8 /* DeepgramResponseParserTests.swift */; };
+		304D545E82B40298930C796A /* OverlayPreviewRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 35DD2AA32B0976CE4B8F1297 /* OverlayPreviewRenderer.swift */; };
+		3345D5BF8F6BBC7996EF57C6 /* ClaudeStreamEventParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 172E038DF3F481541742F362 /* ClaudeStreamEventParser.swift */; };
+		337CBC32E41C7F8760665A32 /* SystemPermissionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72029D6DDD4514701BD6EBD3 /* SystemPermissionController.swift */; };
+		33B409498759C8B49A7AC1CE /* SwiftStreamingMarkdown in Frameworks */ = {isa = PBXBuildFile; productRef = 16AE92549DA4CC6B4EC35EA1 /* SwiftStreamingMarkdown */; };
+		33C00AA53400BD8913C5FCFD /* CodexHomeIsolationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C80DFEE6E5B7FBB58DF8EE /* CodexHomeIsolationTests.swift */; };
+		385D0B5C45BDF20E8A3731D7 /* OverlayOpacityPreference.swift in Sources */ = {isa = PBXBuildFile; fileRef = 33A3BA903824C7556F4216CD /* OverlayOpacityPreference.swift */; };
+		39A18DC6296C2F1FCE645A73 /* OverlayFramePersistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = B252A97530B584318FBFEF56 /* OverlayFramePersistence.swift */; };
+		47B54B48D8564481DFEAFCD5 /* AssistantModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C3E432D4ACEC4C27336A76FC /* AssistantModel.swift */; };
+		4935368FC58FD4F26F91A442 /* OverlayPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9679BC7B6550FB127593D2 /* OverlayPanel.swift */; };
+		4C3011B082941E6485035A85 /* OverlayChrome.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8076DC2503C2CBAE997BE31E /* OverlayChrome.swift */; };
+		4C57D1B1733912F3CA35ED61 /* ClaudeCodeClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 123F86715CC8394B325B86B3 /* ClaudeCodeClient.swift */; };
+		4DBB937BDFDFF54BB5CA04D5 /* JSONLineDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E72D22E3CFFD98E3B408F99 /* JSONLineDecoder.swift */; };
+		53963168EC81653473EA58DC /* ClaudeCodeClientTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE06882C55DAA8E3886619DF /* ClaudeCodeClientTests.swift */; };
+		53BF6BC3D669BAF8E4D0948E /* OverlayOpacityPreferenceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6C16ECCD7220945ADACA919 /* OverlayOpacityPreferenceTests.swift */; };
+		64031BA80C6C86D47669E2E4 /* AtmosphereApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD0363A9648DD3B1ADA9D67 /* AtmosphereApp.swift */; };
+		67307E7EA1957DA30DF81F39 /* AssistantBackendProbe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D283C6160F65C0ECFDE2DAD /* AssistantBackendProbe.swift */; };
+		6FAD6F6605C4355BC87ED828 /* SkyPhaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0E11E07960DA06B5424E76 /* SkyPhaseTests.swift */; };
+		758D7D829FA6D685F8595226 /* DesignSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB76AC2C44C19E3ACDC4B78 /* DesignSystem.swift */; };
+		7B77A67349B84A109E123EAF /* MarkdownSnapshotSourceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F80F95F06B7E347AF7B2925 /* MarkdownSnapshotSourceTests.swift */; };
+		7CB3B376D2CA1D7006833BAA /* PromptHistoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 26A11D6A6CF148141F5B02A1 /* PromptHistoryTests.swift */; };
+		7CE554E724C5DBF187F2F0A2 /* GlobalHotKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = FEED6D5C185173FE6336ED54 /* GlobalHotKey.swift */; };
+		7DF813C8BF06F82C519ADD88 /* SkyBackdrop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 550ABCFC1C77ECEF60EC5B42 /* SkyBackdrop.swift */; };
+		851893C88D38CDA640B8C84E /* DeepgramCredentialStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED911BF0ED0FF5E923B0C2C6 /* DeepgramCredentialStoreTests.swift */; };
+		927E3686AF2ADAB6EB9DEC2B /* OverlayLocalShortcutControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42DE546A713DBC75C1ED5679 /* OverlayLocalShortcutControllerTests.swift */; };
+		A2146E1E12AF4E4B7E4BBC80 /* OverlayLocalShortcutController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E366DB585A0C92696B59446 /* OverlayLocalShortcutController.swift */; };
+		A2F10FFE2E1A2C4AC90FEFF8 /* ProjectSmokeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D099579FC84BEE77942F05A6 /* ProjectSmokeTests.swift */; };
+		A56F8873FB7A13C513A22F62 /* AppIcon.icns in Resources */ = {isa = PBXBuildFile; fileRef = C1701FFB48F2B76B76273630 /* AppIcon.icns */; };
+		A5C4F256EF093E7BDF808166 /* ChatViewModelWorkingDirectoryTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D2A56CE23F9E59F5570A3D9 /* ChatViewModelWorkingDirectoryTests.swift */; };
+		AEDC07D76B0F8789D4CF71FE /* CodexJSONRPCEventParserTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756A08AD9A3B8059B22D3E81 /* CodexJSONRPCEventParserTests.swift */; };
+		B05B7E75A662D63EB35468CF /* AssistantBackend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C092821839DC11827B3FF8C /* AssistantBackend.swift */; };
+		B240A8B556BAC554E65F03B2 /* PromptHistoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 02DB2DF19594BE4C6950B651 /* PromptHistoryStore.swift */; };
+		B397CDE8FB7B844EAD102597 /* ApplicationRelauncher.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5223FDE24600BE3A95E57CEE /* ApplicationRelauncher.swift */; };
+		BE378277F9F7773251989B64 /* MarkdownMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BED9E7CB100C7C24BFAE9994 /* MarkdownMessageView.swift */; };
+		BFBA38CB1D443240DC17B48B /* AtmosphereMark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93E9C0CA1F6FF67DFD1B14EC /* AtmosphereMark.swift */; };
+		C3C7740980F1F986A453D7DC /* OverlayController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC7B1227901F56F729E14262 /* OverlayController.swift */; };
+		C5860CC5C93411BCEBA84303 /* JSONLineDecoderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A59BA723E9E3AF8B218E0FE /* JSONLineDecoderTests.swift */; };
+		CC5FD1F1E52F2187DD1CA868 /* DeepgramTranscriptionClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A184753FC0F998FE5EE9B32 /* DeepgramTranscriptionClient.swift */; };
+		D0FBDEA519B9B73D5FFE4629 /* CodexHomeIsolation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91026943CAF62FFDE8DBE32A /* CodexHomeIsolation.swift */; };
+		D43379798CC8995860207754 /* OverlayScreenshotService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCAA57C665D18A2D09BD4EF /* OverlayScreenshotService.swift */; };
+		DBF31C573EE0AFD04577A57C /* DeepgramCredentialStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6C3E93AAEF2F8816CD4703 /* DeepgramCredentialStore.swift */; };
+		DDAB1DCEE54EEB926883747D /* ChatAttachment.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDDE5FF8EB3C9A7D0088B208 /* ChatAttachment.swift */; };
+		ECD4BEFD8AE50732A7ABEB84 /* AtmosphereCommand.swift in Sources */ = {isa = PBXBuildFile; fileRef = 52245709D452AE0D83CE00AA /* AtmosphereCommand.swift */; };
+		F171E233CF2A6EC31BD19F2C /* ChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C740B6E32D84ED2B27A4AA3 /* ChatViewModel.swift */; };
+		FC09F1D6AE39316235CDE1AC /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D45C574A4A002A4E72855AC /* ChatView.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		C82A60F0A17DEAC730F37E48 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = CDE68477572AC9B9D3346FD3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = C33CC81B7A223B109989F203;
+			remoteInfo = Atmosphere;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		02DB2DF19594BE4C6950B651 /* PromptHistoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptHistoryStore.swift; sourceTree = "<group>"; };
+		09C2476E54F8F91399C6440B /* ComposerTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerTextView.swift; sourceTree = "<group>"; };
+		0A59BA723E9E3AF8B218E0FE /* JSONLineDecoderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONLineDecoderTests.swift; sourceTree = "<group>"; };
+		0CCAA57C665D18A2D09BD4EF /* OverlayScreenshotService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayScreenshotService.swift; sourceTree = "<group>"; };
+		0F2B97DCAC3D20270DAC6F08 /* ComposerKeyPolicyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComposerKeyPolicyTests.swift; sourceTree = "<group>"; };
+		123F86715CC8394B325B86B3 /* ClaudeCodeClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeCodeClient.swift; sourceTree = "<group>"; };
+		17026C63DFF407ED132B68A8 /* MicrophoneRecorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicrophoneRecorder.swift; sourceTree = "<group>"; };
+		172E038DF3F481541742F362 /* ClaudeStreamEventParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeStreamEventParser.swift; sourceTree = "<group>"; };
+		1860F61D03438DA40F897CD8 /* AtmosphereCommandMapTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtmosphereCommandMapTests.swift; sourceTree = "<group>"; };
+		1D283C6160F65C0ECFDE2DAD /* AssistantBackendProbe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantBackendProbe.swift; sourceTree = "<group>"; };
+		1FB76AC2C44C19E3ACDC4B78 /* DesignSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DesignSystem.swift; sourceTree = "<group>"; };
+		2329502B63422A02CDD12B67 /* OverlayFramePersistenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayFramePersistenceTests.swift; sourceTree = "<group>"; };
+		26A11D6A6CF148141F5B02A1 /* PromptHistoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PromptHistoryTests.swift; sourceTree = "<group>"; };
+		2C092821839DC11827B3FF8C /* AssistantBackend.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantBackend.swift; sourceTree = "<group>"; };
+		33A3BA903824C7556F4216CD /* OverlayOpacityPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayOpacityPreference.swift; sourceTree = "<group>"; };
+		35850B46B29F06394E42EE7B /* AtmosphereTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AtmosphereTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		35DD2AA32B0976CE4B8F1297 /* OverlayPreviewRenderer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayPreviewRenderer.swift; sourceTree = "<group>"; };
+		3F80F95F06B7E347AF7B2925 /* MarkdownSnapshotSourceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownSnapshotSourceTests.swift; sourceTree = "<group>"; };
+		42DE546A713DBC75C1ED5679 /* OverlayLocalShortcutControllerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayLocalShortcutControllerTests.swift; sourceTree = "<group>"; };
+		4C740B6E32D84ED2B27A4AA3 /* ChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModel.swift; sourceTree = "<group>"; };
+		4E72D22E3CFFD98E3B408F99 /* JSONLineDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONLineDecoder.swift; sourceTree = "<group>"; };
+		5223FDE24600BE3A95E57CEE /* ApplicationRelauncher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplicationRelauncher.swift; sourceTree = "<group>"; };
+		52245709D452AE0D83CE00AA /* AtmosphereCommand.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtmosphereCommand.swift; sourceTree = "<group>"; };
+		550ABCFC1C77ECEF60EC5B42 /* SkyBackdrop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyBackdrop.swift; sourceTree = "<group>"; };
+		56C80DFEE6E5B7FBB58DF8EE /* CodexHomeIsolationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodexHomeIsolationTests.swift; sourceTree = "<group>"; };
+		5840A8804CE1A91301C7F019 /* CodexAppServerClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodexAppServerClient.swift; sourceTree = "<group>"; };
+		5D2A56CE23F9E59F5570A3D9 /* ChatViewModelWorkingDirectoryTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatViewModelWorkingDirectoryTests.swift; sourceTree = "<group>"; };
+		651D9ACC1593C31D1E3074BE /* WorkingDirectoryPreferenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkingDirectoryPreferenceTests.swift; sourceTree = "<group>"; };
+		72029D6DDD4514701BD6EBD3 /* SystemPermissionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SystemPermissionController.swift; sourceTree = "<group>"; };
+		756A08AD9A3B8059B22D3E81 /* CodexJSONRPCEventParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodexJSONRPCEventParserTests.swift; sourceTree = "<group>"; };
+		777786908FF2B825BFF10BFB /* Atmosphere.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Atmosphere.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		79DBB71119F13B9C1DBE6582 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		7A184753FC0F998FE5EE9B32 /* DeepgramTranscriptionClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepgramTranscriptionClient.swift; sourceTree = "<group>"; };
+		7D45C574A4A002A4E72855AC /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		8076DC2503C2CBAE997BE31E /* OverlayChrome.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayChrome.swift; sourceTree = "<group>"; };
+		8A69DD07EA0E86F6F1C84077 /* WorkingDirectoryPreference.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WorkingDirectoryPreference.swift; sourceTree = "<group>"; };
+		8BB0776F531FA2BBAE4ACAF6 /* ChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessage.swift; sourceTree = "<group>"; };
+		8CD0363A9648DD3B1ADA9D67 /* AtmosphereApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtmosphereApp.swift; sourceTree = "<group>"; };
+		8E6C3E93AAEF2F8816CD4703 /* DeepgramCredentialStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepgramCredentialStore.swift; sourceTree = "<group>"; };
+		91026943CAF62FFDE8DBE32A /* CodexHomeIsolation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodexHomeIsolation.swift; sourceTree = "<group>"; };
+		93E9C0CA1F6FF67DFD1B14EC /* AtmosphereMark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AtmosphereMark.swift; sourceTree = "<group>"; };
+		9E366DB585A0C92696B59446 /* OverlayLocalShortcutController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayLocalShortcutController.swift; sourceTree = "<group>"; };
+		AC7B1227901F56F729E14262 /* OverlayController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayController.swift; sourceTree = "<group>"; };
+		B252A97530B584318FBFEF56 /* OverlayFramePersistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayFramePersistence.swift; sourceTree = "<group>"; };
+		BD9679BC7B6550FB127593D2 /* OverlayPanel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayPanel.swift; sourceTree = "<group>"; };
+		BE06882C55DAA8E3886619DF /* ClaudeCodeClientTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeCodeClientTests.swift; sourceTree = "<group>"; };
+		BED9E7CB100C7C24BFAE9994 /* MarkdownMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkdownMessageView.swift; sourceTree = "<group>"; };
+		C1701FFB48F2B76B76273630 /* AppIcon.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AppIcon.icns; sourceTree = "<group>"; };
+		C3E432D4ACEC4C27336A76FC /* AssistantModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssistantModel.swift; sourceTree = "<group>"; };
+		C6C16ECCD7220945ADACA919 /* OverlayOpacityPreferenceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OverlayOpacityPreferenceTests.swift; sourceTree = "<group>"; };
+		CDDE5FF8EB3C9A7D0088B208 /* ChatAttachment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatAttachment.swift; sourceTree = "<group>"; };
+		D099579FC84BEE77942F05A6 /* ProjectSmokeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProjectSmokeTests.swift; sourceTree = "<group>"; };
+		E929E5860A91F5F61DBD24F8 /* DeepgramResponseParserTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepgramResponseParserTests.swift; sourceTree = "<group>"; };
+		ED911BF0ED0FF5E923B0C2C6 /* DeepgramCredentialStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeepgramCredentialStoreTests.swift; sourceTree = "<group>"; };
+		FE0E11E07960DA06B5424E76 /* SkyPhaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyPhaseTests.swift; sourceTree = "<group>"; };
+		FEED6D5C185173FE6336ED54 /* GlobalHotKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlobalHotKey.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		BC7AF150DFD6225CA86E6C2F /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				33B409498759C8B49A7AC1CE /* SwiftStreamingMarkdown in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		05BD6D9F802E22AF8AD2B06C /* App */ = {
+			isa = PBXGroup;
+			children = (
+				79DBB71119F13B9C1DBE6582 /* AppDelegate.swift */,
+				5223FDE24600BE3A95E57CEE /* ApplicationRelauncher.swift */,
+				1D283C6160F65C0ECFDE2DAD /* AssistantBackendProbe.swift */,
+				8CD0363A9648DD3B1ADA9D67 /* AtmosphereApp.swift */,
+				35DD2AA32B0976CE4B8F1297 /* OverlayPreviewRenderer.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		0BC3B9FA7BD61B16C7C88221 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				C3E432D4ACEC4C27336A76FC /* AssistantModel.swift */,
+				CDDE5FF8EB3C9A7D0088B208 /* ChatAttachment.swift */,
+				8BB0776F531FA2BBAE4ACAF6 /* ChatMessage.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		1D96F28C9ECE862D2EABFEB8 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				2C092821839DC11827B3FF8C /* AssistantBackend.swift */,
+				123F86715CC8394B325B86B3 /* ClaudeCodeClient.swift */,
+				172E038DF3F481541742F362 /* ClaudeStreamEventParser.swift */,
+				5840A8804CE1A91301C7F019 /* CodexAppServerClient.swift */,
+				91026943CAF62FFDE8DBE32A /* CodexHomeIsolation.swift */,
+				8E6C3E93AAEF2F8816CD4703 /* DeepgramCredentialStore.swift */,
+				7A184753FC0F998FE5EE9B32 /* DeepgramTranscriptionClient.swift */,
+				4E72D22E3CFFD98E3B408F99 /* JSONLineDecoder.swift */,
+				17026C63DFF407ED132B68A8 /* MicrophoneRecorder.swift */,
+				33A3BA903824C7556F4216CD /* OverlayOpacityPreference.swift */,
+				0CCAA57C665D18A2D09BD4EF /* OverlayScreenshotService.swift */,
+				02DB2DF19594BE4C6950B651 /* PromptHistoryStore.swift */,
+				72029D6DDD4514701BD6EBD3 /* SystemPermissionController.swift */,
+				8A69DD07EA0E86F6F1C84077 /* WorkingDirectoryPreference.swift */,
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		49F0597B58DE485CDC3BC711 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				777786908FF2B825BFF10BFB /* Atmosphere.app */,
+				35850B46B29F06394E42EE7B /* AtmosphereTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		52583D1C1774599F5F74D884 /* UI */ = {
+			isa = PBXGroup;
+			children = (
+				93E9C0CA1F6FF67DFD1B14EC /* AtmosphereMark.swift */,
+				7D45C574A4A002A4E72855AC /* ChatView.swift */,
+				09C2476E54F8F91399C6440B /* ComposerTextView.swift */,
+				1FB76AC2C44C19E3ACDC4B78 /* DesignSystem.swift */,
+				BED9E7CB100C7C24BFAE9994 /* MarkdownMessageView.swift */,
+				8076DC2503C2CBAE997BE31E /* OverlayChrome.swift */,
+				550ABCFC1C77ECEF60EC5B42 /* SkyBackdrop.swift */,
+			);
+			path = UI;
+			sourceTree = "<group>";
+		};
+		5E53A7CBD494A7E393A4681A /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				4C740B6E32D84ED2B27A4AA3 /* ChatViewModel.swift */,
+			);
+			path = ViewModels;
+			sourceTree = "<group>";
+		};
+		6D63494FD20314A5A60DBCDD /* Overlay */ = {
+			isa = PBXGroup;
+			children = (
+				AC7B1227901F56F729E14262 /* OverlayController.swift */,
+				B252A97530B584318FBFEF56 /* OverlayFramePersistence.swift */,
+				BD9679BC7B6550FB127593D2 /* OverlayPanel.swift */,
+			);
+			path = Overlay;
+			sourceTree = "<group>";
+		};
+		6EC98A743FC36EF5B77777C3 /* AtmosphereTests */ = {
+			isa = PBXGroup;
+			children = (
+				1860F61D03438DA40F897CD8 /* AtmosphereCommandMapTests.swift */,
+				5D2A56CE23F9E59F5570A3D9 /* ChatViewModelWorkingDirectoryTests.swift */,
+				BE06882C55DAA8E3886619DF /* ClaudeCodeClientTests.swift */,
+				56C80DFEE6E5B7FBB58DF8EE /* CodexHomeIsolationTests.swift */,
+				756A08AD9A3B8059B22D3E81 /* CodexJSONRPCEventParserTests.swift */,
+				0F2B97DCAC3D20270DAC6F08 /* ComposerKeyPolicyTests.swift */,
+				ED911BF0ED0FF5E923B0C2C6 /* DeepgramCredentialStoreTests.swift */,
+				E929E5860A91F5F61DBD24F8 /* DeepgramResponseParserTests.swift */,
+				0A59BA723E9E3AF8B218E0FE /* JSONLineDecoderTests.swift */,
+				3F80F95F06B7E347AF7B2925 /* MarkdownSnapshotSourceTests.swift */,
+				2329502B63422A02CDD12B67 /* OverlayFramePersistenceTests.swift */,
+				42DE546A713DBC75C1ED5679 /* OverlayLocalShortcutControllerTests.swift */,
+				C6C16ECCD7220945ADACA919 /* OverlayOpacityPreferenceTests.swift */,
+				D099579FC84BEE77942F05A6 /* ProjectSmokeTests.swift */,
+				26A11D6A6CF148141F5B02A1 /* PromptHistoryTests.swift */,
+				FE0E11E07960DA06B5424E76 /* SkyPhaseTests.swift */,
+				651D9ACC1593C31D1E3074BE /* WorkingDirectoryPreferenceTests.swift */,
+			);
+			path = AtmosphereTests;
+			sourceTree = "<group>";
+		};
+		BF20F56A8E3337B416DACF85 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C1701FFB48F2B76B76273630 /* AppIcon.icns */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		C40DF62A4C987B503319FD33 = {
+			isa = PBXGroup;
+			children = (
+				FB4422E1D78C65CFFA2FAE61 /* Atmosphere */,
+				6EC98A743FC36EF5B77777C3 /* AtmosphereTests */,
+				49F0597B58DE485CDC3BC711 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		E1C6E85F81AA6A43C34B71CF /* System */ = {
+			isa = PBXGroup;
+			children = (
+				52245709D452AE0D83CE00AA /* AtmosphereCommand.swift */,
+				FEED6D5C185173FE6336ED54 /* GlobalHotKey.swift */,
+				9E366DB585A0C92696B59446 /* OverlayLocalShortcutController.swift */,
+			);
+			path = System;
+			sourceTree = "<group>";
+		};
+		FB4422E1D78C65CFFA2FAE61 /* Atmosphere */ = {
+			isa = PBXGroup;
+			children = (
+				05BD6D9F802E22AF8AD2B06C /* App */,
+				0BC3B9FA7BD61B16C7C88221 /* Models */,
+				6D63494FD20314A5A60DBCDD /* Overlay */,
+				BF20F56A8E3337B416DACF85 /* Resources */,
+				1D96F28C9ECE862D2EABFEB8 /* Services */,
+				E1C6E85F81AA6A43C34B71CF /* System */,
+				52583D1C1774599F5F74D884 /* UI */,
+				5E53A7CBD494A7E393A4681A /* ViewModels */,
+			);
+			path = Atmosphere;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		B7769D9092C564A10EBCF4AC /* AtmosphereTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 6F6145BE01EEEF8D6E4A78CD /* Build configuration list for PBXNativeTarget "AtmosphereTests" */;
+			buildPhases = (
+				32ADC0F7AD0B611E7B5CAB60 /* Sources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				B3F9B22F1B16D1CD32F43AA1 /* PBXTargetDependency */,
+			);
+			name = AtmosphereTests;
+			packageProductDependencies = (
+			);
+			productName = AtmosphereTests;
+			productReference = 35850B46B29F06394E42EE7B /* AtmosphereTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		C33CC81B7A223B109989F203 /* Atmosphere */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EAB9111D890CA94CFFC21461 /* Build configuration list for PBXNativeTarget "Atmosphere" */;
+			buildPhases = (
+				D99A827596C3EF31A1EC836D /* Sources */,
+				176FAD3EF93023006551D287 /* Resources */,
+				BC7AF150DFD6225CA86E6C2F /* Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = Atmosphere;
+			packageProductDependencies = (
+				16AE92549DA4CC6B4EC35EA1 /* SwiftStreamingMarkdown */,
+			);
+			productName = Atmosphere;
+			productReference = 777786908FF2B825BFF10BFB /* Atmosphere.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		CDE68477572AC9B9D3346FD3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = YES;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					C33CC81B7A223B109989F203 = {
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 5819A0F94D61A7A8493874FE /* Build configuration list for PBXProject "Atmosphere" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				Base,
+				en,
+			);
+			mainGroup = C40DF62A4C987B503319FD33;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				94E3E80E147A301823815AEB /* XCRemoteSwiftPackageReference "SwiftStreamingMarkdown" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 49F0597B58DE485CDC3BC711 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				C33CC81B7A223B109989F203 /* Atmosphere */,
+				B7769D9092C564A10EBCF4AC /* AtmosphereTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		176FAD3EF93023006551D287 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A56F8873FB7A13C513A22F62 /* AppIcon.icns in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		32ADC0F7AD0B611E7B5CAB60 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2B6AD7B51EE74BE64CE5BC12 /* AtmosphereCommandMapTests.swift in Sources */,
+				A5C4F256EF093E7BDF808166 /* ChatViewModelWorkingDirectoryTests.swift in Sources */,
+				53963168EC81653473EA58DC /* ClaudeCodeClientTests.swift in Sources */,
+				33C00AA53400BD8913C5FCFD /* CodexHomeIsolationTests.swift in Sources */,
+				AEDC07D76B0F8789D4CF71FE /* CodexJSONRPCEventParserTests.swift in Sources */,
+				053C4284ABE85061CE9FE870 /* ComposerKeyPolicyTests.swift in Sources */,
+				851893C88D38CDA640B8C84E /* DeepgramCredentialStoreTests.swift in Sources */,
+				2F70DAEFB6099610A2D75E0D /* DeepgramResponseParserTests.swift in Sources */,
+				C5860CC5C93411BCEBA84303 /* JSONLineDecoderTests.swift in Sources */,
+				7B77A67349B84A109E123EAF /* MarkdownSnapshotSourceTests.swift in Sources */,
+				1BC0F181E29EC42F7B870DF4 /* OverlayFramePersistenceTests.swift in Sources */,
+				927E3686AF2ADAB6EB9DEC2B /* OverlayLocalShortcutControllerTests.swift in Sources */,
+				53BF6BC3D669BAF8E4D0948E /* OverlayOpacityPreferenceTests.swift in Sources */,
+				A2F10FFE2E1A2C4AC90FEFF8 /* ProjectSmokeTests.swift in Sources */,
+				7CB3B376D2CA1D7006833BAA /* PromptHistoryTests.swift in Sources */,
+				6FAD6F6605C4355BC87ED828 /* SkyPhaseTests.swift in Sources */,
+				29276178F7EDD5668FB6A62E /* WorkingDirectoryPreferenceTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D99A827596C3EF31A1EC836D /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				26BC74964655322900EF716B /* AppDelegate.swift in Sources */,
+				B397CDE8FB7B844EAD102597 /* ApplicationRelauncher.swift in Sources */,
+				B05B7E75A662D63EB35468CF /* AssistantBackend.swift in Sources */,
+				67307E7EA1957DA30DF81F39 /* AssistantBackendProbe.swift in Sources */,
+				47B54B48D8564481DFEAFCD5 /* AssistantModel.swift in Sources */,
+				64031BA80C6C86D47669E2E4 /* AtmosphereApp.swift in Sources */,
+				ECD4BEFD8AE50732A7ABEB84 /* AtmosphereCommand.swift in Sources */,
+				BFBA38CB1D443240DC17B48B /* AtmosphereMark.swift in Sources */,
+				DDAB1DCEE54EEB926883747D /* ChatAttachment.swift in Sources */,
+				138ADA44A91793AE2EA1B489 /* ChatMessage.swift in Sources */,
+				FC09F1D6AE39316235CDE1AC /* ChatView.swift in Sources */,
+				F171E233CF2A6EC31BD19F2C /* ChatViewModel.swift in Sources */,
+				4C57D1B1733912F3CA35ED61 /* ClaudeCodeClient.swift in Sources */,
+				3345D5BF8F6BBC7996EF57C6 /* ClaudeStreamEventParser.swift in Sources */,
+				07D3066A79BB02B02D334BC3 /* CodexAppServerClient.swift in Sources */,
+				D0FBDEA519B9B73D5FFE4629 /* CodexHomeIsolation.swift in Sources */,
+				12C6CD8F106958770761F918 /* ComposerTextView.swift in Sources */,
+				DBF31C573EE0AFD04577A57C /* DeepgramCredentialStore.swift in Sources */,
+				CC5FD1F1E52F2187DD1CA868 /* DeepgramTranscriptionClient.swift in Sources */,
+				758D7D829FA6D685F8595226 /* DesignSystem.swift in Sources */,
+				7CE554E724C5DBF187F2F0A2 /* GlobalHotKey.swift in Sources */,
+				4DBB937BDFDFF54BB5CA04D5 /* JSONLineDecoder.swift in Sources */,
+				BE378277F9F7773251989B64 /* MarkdownMessageView.swift in Sources */,
+				2C026B162D5464E03DFEFE90 /* MicrophoneRecorder.swift in Sources */,
+				4C3011B082941E6485035A85 /* OverlayChrome.swift in Sources */,
+				C3C7740980F1F986A453D7DC /* OverlayController.swift in Sources */,
+				39A18DC6296C2F1FCE645A73 /* OverlayFramePersistence.swift in Sources */,
+				A2146E1E12AF4E4B7E4BBC80 /* OverlayLocalShortcutController.swift in Sources */,
+				385D0B5C45BDF20E8A3731D7 /* OverlayOpacityPreference.swift in Sources */,
+				4935368FC58FD4F26F91A442 /* OverlayPanel.swift in Sources */,
+				304D545E82B40298930C796A /* OverlayPreviewRenderer.swift in Sources */,
+				D43379798CC8995860207754 /* OverlayScreenshotService.swift in Sources */,
+				B240A8B556BAC554E65F03B2 /* PromptHistoryStore.swift in Sources */,
+				7DF813C8BF06F82C519ADD88 /* SkyBackdrop.swift in Sources */,
+				337CBC32E41C7F8760665A32 /* SystemPermissionController.swift in Sources */,
+				1F832968C6A03FA3B97B95ED /* WorkingDirectoryPreference.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		B3F9B22F1B16D1CD32F43AA1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = C33CC81B7A223B109989F203 /* Atmosphere */;
+			targetProxy = C82A60F0A17DEAC730F37E48 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		0BB1E2F15A66ACCCAF23E4B2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"$(inherited)",
+					"DEBUG=1",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		144553FAE4AB4730692BB401 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.unlikefraction.atmosphere.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Atmosphere.app/Contents/MacOS/Atmosphere";
+			};
+			name = Release;
+		};
+		2078B6C5F853118A30C0C1B7 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 13;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Atmosphere/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.4.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.unlikefraction.atmosphere;
+				PRODUCT_NAME = Atmosphere;
+				SDKROOT = macosx;
+			};
+			name = Debug;
+		};
+		29F9AA5F0A372509EA26E71C /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 13;
+				ENABLE_APP_SANDBOX = NO;
+				ENABLE_HARDENED_RUNTIME = NO;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = Atmosphere/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+				);
+				MARKETING_VERSION = 0.4.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.unlikefraction.atmosphere;
+				PRODUCT_NAME = Atmosphere;
+				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		5D01D1FB44A0E1AB019C9039 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MACOSX_DEPLOYMENT_TARGET = 14.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		E20F772C2F7819B3DC8247AA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_APP_SANDBOX = NO;
+				GENERATE_INFOPLIST_FILE = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.unlikefraction.atmosphere.tests;
+				SDKROOT = macosx;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Atmosphere.app/Contents/MacOS/Atmosphere";
+			};
+			name = Debug;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		5819A0F94D61A7A8493874FE /* Build configuration list for PBXProject "Atmosphere" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0BB1E2F15A66ACCCAF23E4B2 /* Debug */,
+				5D01D1FB44A0E1AB019C9039 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		6F6145BE01EEEF8D6E4A78CD /* Build configuration list for PBXNativeTarget "AtmosphereTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E20F772C2F7819B3DC8247AA /* Debug */,
+				144553FAE4AB4730692BB401 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		EAB9111D890CA94CFFC21461 /* Build configuration list for PBXNativeTarget "Atmosphere" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				2078B6C5F853118A30C0C1B7 /* Debug */,
+				29F9AA5F0A372509EA26E71C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		94E3E80E147A301823815AEB /* XCRemoteSwiftPackageReference "SwiftStreamingMarkdown" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/microsoft/SwiftStreamingMarkdown";
+			requirement = {
+				kind = revision;
+				revision = c7b12f7b3d77caa188fd1fc056d0f7ce305ef5cd;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		16AE92549DA4CC6B4EC35EA1 /* SwiftStreamingMarkdown */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 94E3E80E147A301823815AEB /* XCRemoteSwiftPackageReference "SwiftStreamingMarkdown" */;
+			productName = SwiftStreamingMarkdown;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = CDE68477572AC9B9D3346FD3 /* Project object */;
+}

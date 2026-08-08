@@ -1,0 +1,67 @@
+name: Atmosphere
+
+options:
+  bundleIdPrefix: com.unlikefraction
+  minimumXcodeGenVersion: "2.45.4"
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    CLANG_ENABLE_MODULES: YES
+    ENABLE_USER_SCRIPT_SANDBOXING: YES
+
+packages:
+  SwiftStreamingMarkdown:
+    url: https://github.com/microsoft/SwiftStreamingMarkdown
+    revision: c7b12f7b3d77caa188fd1fc056d0f7ce305ef5cd
+
+targets:
+  Atmosphere:
+    type: application
+    platform: macOS
+    sources:
+      - path: Atmosphere
+        excludes:
+          - Info.plist
+    dependencies:
+      - package: SwiftStreamingMarkdown
+    info:
+      path: Atmosphere/Info.plist
+      properties:
+        LSUIElement: true
+        NSMicrophoneUsageDescription: "Atmosphere records only while voice input is active so Deepgram can turn your speech into a message."
+        NSScreenCaptureUsageDescription: "Atmosphere captures the current display only when you press backtick, excluding its own overlay, so you can attach visual context to a message."
+        CFBundleIconFile: AppIcon
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.unlikefraction.atmosphere
+        PRODUCT_NAME: Atmosphere
+        MARKETING_VERSION: "0.4.0"
+        CURRENT_PROJECT_VERSION: "13"
+        GENERATE_INFOPLIST_FILE: NO
+        ENABLE_APP_SANDBOX: NO
+        ENABLE_HARDENED_RUNTIME: NO
+        CODE_SIGN_STYLE: Automatic
+        COMBINE_HIDPI_IMAGES: YES
+    scheme:
+      testTargets:
+        - AtmosphereTests
+
+  AtmosphereTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - path: AtmosphereTests
+    dependencies:
+      - target: Atmosphere
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.unlikefraction.atmosphere.tests
+        GENERATE_INFOPLIST_FILE: YES
+        ENABLE_APP_SANDBOX: NO
