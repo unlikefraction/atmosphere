@@ -469,6 +469,37 @@ The script performs a fresh build, stages and verifies the signed candidate, and
 only then replaces `dist/Atmosphere.app`. The result is ad-hoc signed for local
 use; it is not a Developer ID-signed or notarized distribution.
 
+### Signing and notarization
+
+The published release is ad-hoc signed, which is why first launch needs a
+right-click. With a paid Apple Developer account the friction disappears
+entirely — a notarized build opens on a double-click, on any Mac, offline.
+
+Two things are needed, and both are account-level actions:
+
+1. A **Developer ID Application** certificate. Xcode → Settings → Accounts →
+   your Apple ID → Manage Certificates → **+** → Developer ID Application.
+   (`security find-identity -v -p codesigning` should then list it.)
+2. **Notarization credentials**, stored once in the keychain:
+
+   ```bash
+   xcrun notarytool store-credentials AtmosphereNotary \
+     --apple-id you@example.com --team-id TEAMID \
+     --password <app-specific-password-from-appleid.apple.com>
+   ```
+
+Then one command produces a notarized, stapled app:
+
+```bash
+ATMOSPHERE_SIGNING_IDENTITY="Developer ID Application: Your Name (TEAMID)" \
+  ATMOSPHERE_NOTARY_PROFILE=AtmosphereNotary \
+  ./Scripts/build-release.sh
+```
+
+The script signs with the hardened runtime and a secure timestamp, submits,
+waits, staples the ticket, and asserts `spctl` accepts the result. Skip
+`ATMOSPHERE_NOTARY_PROFILE` and it builds exactly as before.
+
 To preserve the app's macOS microphone and Screen Recording privacy identity
 across rebuilds, supply a stable signing identity installed on the Mac:
 

@@ -46,7 +46,10 @@ targets:
         CURRENT_PROJECT_VERSION: "13"
         GENERATE_INFOPLIST_FILE: NO
         ENABLE_APP_SANDBOX: NO
-        ENABLE_HARDENED_RUNTIME: NO
+        # Notarization requires the hardened runtime, and the runtime requires
+        # the microphone entitlement for voice input to keep working.
+        ENABLE_HARDENED_RUNTIME: YES
+        CODE_SIGN_ENTITLEMENTS: Atmosphere/Atmosphere.entitlements
         CODE_SIGN_STYLE: Automatic
         COMBINE_HIDPI_IMAGES: YES
     scheme:
@@ -65,3 +68,4 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: com.unlikefraction.atmosphere.tests
         GENERATE_INFOPLIST_FILE: YES
         ENABLE_APP_SANDBOX: NO
+        ENABLE_HARDENED_RUNTIME: NO
