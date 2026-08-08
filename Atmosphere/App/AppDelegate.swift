@@ -3,6 +3,12 @@ import Carbon.HIToolbox
 
 @MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
+    #if DEBUG
+    static let demoConversationArgument = "--demo-conversation"
+    static let demoShortcutsArgument = "--demo-shortcuts"
+    static let demoIdleArgument = "--demo-idle"
+    #endif
+
     private var overlayController: OverlayController?
     private var globalHotKey: GlobalHotKey?
     private var viewModel: ChatViewModel?
@@ -30,6 +36,26 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
         self.viewModel = viewModel
         self.overlayController = overlayController
+
+        #if DEBUG
+        // Fills the overlay with a fixed conversation and shows it, so the real
+        // panel — real vibrancy, real shadow, real glass — can be photographed
+        // for the README. Debug-only; never reachable in Release.
+        let arguments = ProcessInfo.processInfo.arguments
+        if arguments.contains(Self.demoConversationArgument)
+            || arguments.contains(Self.demoShortcutsArgument)
+            || arguments.contains(Self.demoIdleArgument) {
+            if arguments.contains(Self.demoConversationArgument) {
+                viewModel.applyPreviewFixture(streaming: false)
+            }
+            overlayController.allowCaptureForDebugging()
+            overlayController.show()
+            if arguments.contains(Self.demoShortcutsArgument) {
+                overlayController.showShortcutsForDebugging()
+            }
+            return
+        }
+        #endif
 
         #if DEBUG
         if ProcessInfo.processInfo.arguments.contains(OverlayController.allowCaptureArgument) {

@@ -1,38 +1,122 @@
-# Atmosphere
+<p align="center">
+  <img src="Docs/screenshots/icon.png" width="128" alt="Atmosphere">
+</p>
 
-Atmosphere is a native, keyboard-first macOS assistant overlay. Press `⌘ + \`
-from any app, type a question, and receive a streamed answer without opening a
-browser or switching to the ChatGPT window.
+<h1 align="center">Atmosphere</h1>
 
-It is built with AppKit + SwiftUI, stays above normal windows, joins every
-Space and full-screen app, and runs without a Dock or menu-bar icon.
+<p align="center">
+  A keyboard-first assistant overlay for macOS.<br>
+  Press <code>⌘\</code> anywhere, ask, get a streamed answer. Never touch the mouse.
+</p>
 
-## Open the built app
+<p align="center">
+  <a href="https://github.com/unlikefraction/atmosphere/releases/latest">
+    <img src="https://img.shields.io/badge/Download-macOS%2014%2B-1e2340?style=for-the-badge" alt="Download">
+  </a>
+</p>
 
-After completing the Debug build below, the app is at:
+<p align="center">
+  <img src="Docs/screenshots/idle.png" width="820" alt="The idle prompt bar">
+</p>
 
-```text
-.build/Build/Products/Debug/Atmosphere.app
-```
+## What it is
 
-Open it in Finder or run:
+Atmosphere is one line of glass that floats over whatever you are doing. It has
+no Dock icon, no menu-bar item, and no window to manage. `⌘\` brings it up on
+top of every app and every Space — including full-screen ones — and `Esc` puts
+it away.
 
-```bash
-open .build/Build/Products/Debug/Atmosphere.app
-```
+**It is built to be fast enough that you never plan around it.** Ask a question
+mid-sentence, get the answer, dismiss it, keep working. The panel is a single
+prompt bar until there is something to show; then it opens upward into a
+conversation, so the prompt never moves out from under your cursor.
 
-The overlay appears once on first launch. After that:
+**Your hands never leave the keyboard.** Typing, dictating, and screenshotting
+are all one keystroke each, and they compose:
 
-- `⌘ + \` shows or hides it;
-- bare `\`, while Atmosphere is visible, starts voice recording; pressing it
-  again stops, transcribes with Deepgram, and submits;
-- bare backtick (`` ` ``), while visible, silently captures the panel's current
-  display without Atmosphere and adds it to the composer without submitting;
-- `Esc` hides it (or closes the shortcut sheet, if it is open);
-- `Return` sends a question;
-- `⌘Return` also sends;
-- the stop button interrupts an answer; and
-- **Clear and hide** removes the visible conversation and closes the panel.
+- **Type** — just type. `Return` sends, `⇧Return` adds a line.
+- **Speak** — `\` starts recording, `\` again transcribes and sends. English,
+  Hindi, Hinglish, and Urdu are all tried automatically.
+- **Show** — `` ` `` silently captures the screen behind the panel and attaches
+  it. No shutter sound, no flash, and Atmosphere excludes itself from the shot.
+
+Press `` ` `` to grab the error you are looking at, then `\` and say "why is
+this happening?", and both go up together as one message — without ever
+reaching for the trackpad.
+
+<p align="center">
+  <img src="Docs/screenshots/conversation.png" width="820" alt="A conversation, with the prompt at the bottom">
+</p>
+
+## Two answer models
+
+`⌘M` switches between them; the footer names the one in use.
+
+| Model | Runs through |
+| --- | --- |
+| **GPT‑5.6 Luna** · medium reasoning | the Codex app server bundled with the ChatGPT app |
+| **Claude Opus 5** · light thinking | the Claude Code CLI |
+
+Both are local, first-party command-line tools that you are **already signed in
+to**. Atmosphere never asks for an API key, never stores a token, and never
+touches your credentials — it starts the tool you already have and reads its
+output.
+
+Point it at a folder and either model can read files in it — read-only, always.
+Neither can write, delete, or run commands.
+
+<p align="center">
+  <img src="Docs/screenshots/shortcuts.png" width="820" alt="The keyboard shortcut sheet">
+</p>
+
+## Install
+
+1. **[Download the latest release](https://github.com/unlikefraction/atmosphere/releases/latest)**
+   and unzip it.
+2. Drag `Atmosphere.app` to `/Applications`.
+3. **The first launch needs a right-click.** Right-click (or Control-click) the
+   app and choose **Open**, then **Open** again in the dialog. A normal
+   double-click will be blocked — see below for why.
+4. Press `⌘\`. The overlay appears.
+
+### Why macOS complains, and what to do
+
+The app is **ad-hoc signed**, not signed with a paid Apple Developer ID and not
+notarized. That is the honest trade: no $99/year certificate, and macOS treats
+it as unidentified software. It is the same binary the source in this repo
+builds — you can verify that by building it yourself.
+
+| What you see | What to do |
+| --- | --- |
+| *"Atmosphere" cannot be opened because Apple cannot check it for malicious software* | Right-click the app → **Open** → **Open**. Only needed once. |
+| *"Atmosphere" is damaged and can't be opened* | The quarantine flag survived the unzip. Run: `xattr -dr com.apple.quarantine /Applications/Atmosphere.app` |
+| Nothing happens when you open it | That is correct. Atmosphere has no Dock icon. Press `⌘\`. |
+| `⌘\` does nothing | Another app owns that shortcut. Quit it and relaunch Atmosphere. |
+
+### Permissions
+
+Atmosphere asks for nothing until you use the feature that needs it.
+
+- **Microphone** — only for `\` voice input. Granted on first use.
+- **Screen Recording** — only for `` ` `` screenshots. macOS requires one
+  restart after the first grant; the panel offers a **Restart** button that
+  does it for you.
+
+Both appear as orange chips in the footer when they are off, and clicking a
+chip takes you straight to the right pane of System Settings.
+
+## Requirements
+
+- macOS 14 (Sonoma) or newer, Apple silicon or Intel
+- At least one answer model:
+  - **GPT‑5.6 Luna** — the [ChatGPT desktop app](https://openai.com/chatgpt/download/),
+    signed in. Atmosphere uses the `codex` runtime inside it.
+  - **Claude Opus 5** — the [Claude Code CLI](https://claude.com/claude-code),
+    signed in (`claude` on your `PATH`).
+- **Voice input is optional** and needs a [Deepgram](https://deepgram.com) API
+  key in `~/.atmosphere/deepgram-api-key` — see [Deepgram voice setup](#deepgram-voice-setup).
+  Everything else works without it.
+
 
 ## Shape and motion
 
@@ -177,16 +261,10 @@ English, Hindi, Nova-3 English/Hindi code-switching (Hinglish), then Urdu. The
 first confident, script-compatible transcript is submitted. If every attempt is
 empty or unreliable, Atmosphere reports that no text was detected.
 
-## Two answer models
+## Switching models
 
-`⌘M` switches between the two engines, and the footer names the active one.
-Both are local first-party CLIs the user is already signed in to; Atmosphere
-never holds a key for either.
-
-| Model | How it runs |
-| --- | --- |
-| GPT-5.6 Luna · medium | `codex app-server` over a private stdio pipe |
-| Claude Opus 5 · light thinking | `claude --print` in streaming-input mode |
+`⌘M` moves between the two engines: `codex app-server` over a private stdio
+pipe, and `claude --print` in streaming-input mode.
 
 A conversation belongs to one engine. Switching ends the current thread, starts
 the other engine, and clears the transcript — leaving the answers on screen
@@ -276,7 +354,7 @@ sound. The first use asks for Screen Recording access; after granting it, use
 Atmosphere's `Restart Atmosphere` action once, as required by Apple's
 first-grant behavior.
 
-## Build
+## Build from source
 
 Requirements:
 

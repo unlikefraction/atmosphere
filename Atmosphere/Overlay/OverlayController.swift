@@ -234,6 +234,10 @@ final class OverlayController {
     func allowCaptureForDebugging() {
         panel.sharingType = .readOnly
     }
+
+    func showShortcutsForDebugging() {
+        chrome.isShortcutsVisible = true
+    }
     #endif
 
     func refreshSystemPermissions() {
