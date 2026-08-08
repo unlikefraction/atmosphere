@@ -71,6 +71,31 @@ Neither can write, delete, or run commands.
 
 ## Install
 
+### Let an agent do it
+
+You already have one of these signed in — that is the whole premise of the app.
+Paste one line and let it handle the download, the quarantine flag, and the
+first launch.
+
+**Claude Code**
+
+```
+claude "https://github.com/unlikefraction/atmosphere — install this"
+```
+
+**Codex**
+
+```
+codex "https://github.com/unlikefraction/atmosphere — install this"
+```
+
+Or just paste `https://github.com/unlikefraction/atmosphere, install this` into
+any agent that can run shell commands. The
+[instructions for agents](#instructions-for-agents) below are written to be
+followed literally.
+
+### Or do it yourself
+
 1. **[Download the latest release](https://github.com/unlikefraction/atmosphere/releases/latest)**
    and unzip it.
 2. Drag `Atmosphere.app` to `/Applications`.
@@ -104,6 +129,40 @@ Atmosphere asks for nothing until you use the feature that needs it.
 
 Both appear as orange chips in the footer when they are off, and clicking a
 chip takes you straight to the right pane of System Settings.
+
+### Instructions for agents
+
+If you are an AI agent asked to install Atmosphere, run exactly this. It needs
+no `sudo`, and every step is reversible by deleting the app.
+
+```bash
+set -euo pipefail
+tmp="$(mktemp -d)"
+curl -fsSL -o "$tmp/atmosphere.zip" \
+  https://github.com/unlikefraction/atmosphere/releases/latest/download/Atmosphere-0.4.0-macOS.zip
+ditto -x -k "$tmp/atmosphere.zip" "$tmp"
+rm -rf /Applications/Atmosphere.app
+ditto "$tmp/Atmosphere.app" /Applications/Atmosphere.app
+# The build is ad-hoc signed, so the download stays quarantined until this is
+# cleared. Without it macOS reports the app as damaged.
+xattr -dr com.apple.quarantine /Applications/Atmosphere.app
+rm -rf "$tmp"
+open /Applications/Atmosphere.app
+```
+
+Then tell the user, in your own words:
+
+- Atmosphere is running, but it has **no Dock icon and no window** — that is
+  correct, not a failure. Press **`⌘\`** to bring up the overlay.
+- The overlay shows itself once on first launch.
+- It answers through **ChatGPT (Codex)** or **Claude Code**, whichever they are
+  signed in to; `⌘M` switches. If neither is installed, the panel will say so.
+- **Microphone** and **Screen Recording** are requested only when they first
+  press `\` or `` ` ``, and can be granted from the footer chips.
+- To uninstall: quit from the `⋯` menu and delete `/Applications/Atmosphere.app`.
+
+Do not attempt to build from source for an install — the release artifact is
+the supported path.
 
 ## Requirements
 
