@@ -64,7 +64,7 @@ final class CodexHomeIsolationTests: XCTestCase {
         )
     }
 
-    func testProcessEnvironmentOverridesOnlyCodexHome() throws {
+    func testProcessEnvironmentIsolatesCodexHomeAndAddsLocalToolPaths() throws {
         let isolation = makeIsolation()
 
         let environment = try isolation.processEnvironment(
@@ -72,7 +72,9 @@ final class CodexHomeIsolationTests: XCTestCase {
         )
 
         XCTAssertEqual(environment["CODEX_HOME"], privateHome.standardizedFileURL.path)
-        XCTAssertEqual(environment["PATH"], "/usr/bin")
+        XCTAssertTrue(environment["PATH"]?.hasPrefix("/usr/bin:") == true)
+        XCTAssertTrue(environment["PATH"]?.contains("/opt/homebrew/bin") == true)
+        XCTAssertTrue(environment["PATH"]?.contains("/.local/bin") == true)
         XCTAssertEqual(environment["HOME"], "/do/not/change")
     }
 
@@ -91,6 +93,58 @@ final class CodexHomeIsolationTests: XCTestCase {
                 .unexpectedConfiguration(configuration.path)
             )
         }
+    }
+
+    func testPrepareAcceptsCodexGeneratedProjectTrustWithoutChangingIt() throws {
+        let text = "[projects.\"/Users/unlikefraction\"]\ntrust_level = \"trusted\"\n"
+        let configuration = try makeConfiguration(text)
+
+        XCTAssertEqual(try makeIsolation().prepare(), privateHome.standardizedFileURL)
+        XCTAssertEqual(try String(contentsOf: configuration, encoding: .utf8), text)
+        XCTAssertEqual(try makeIsolation().prepare(), privateHome.standardizedFileURL)
+    }
+
+    func testPrepareAcceptsMultipleProjectTrustEntriesAndPrivateParentPermissions() throws {
+        let text = #"""
+        [projects."/Users/test/folder with \"quotes\""]
+        trust_level = "trusted"
+
+        [projects."/Users/test/日本語"]
+        trust_level = "untrusted"
+        """#
+        _ = try makeConfiguration(text, permissions: 0o644)
+
+        XCTAssertEqual(try makeIsolation().prepare(), privateHome.standardizedFileURL)
+    }
+
+    func testPrepareRejectsToolSettingsAlongsideProjectTrust() throws {
+        let trust = "[projects.\"/Users/test\"]\ntrust_level = \"trusted\"\n"
+        for extra in [
+            "[mcp_servers.example]\ncommand = \"unwanted\"\n",
+            "[features]\nplugins = true\n",
+            "command = \"unwanted\"\n",
+            "[projects.\"/Users/other\"]\ntrust_level = \"invalid\"\n",
+            "[projects.\"/Users/other\"]\ntrust_level = \"trusted\"; command = \"unwanted\"\n"
+        ] {
+            let configuration = try makeConfiguration(trust + extra)
+
+            XCTAssertThrowsError(try makeIsolation().prepare(), extra) { error in
+                XCTAssertEqual(error as? CodexHomeIsolationError, .unexpectedConfiguration(configuration.path))
+            }
+        }
+    }
+
+    func testPrepareRejectsWritableOrSymlinkedProjectTrustConfiguration() throws {
+        let text = "[projects.\"/Users/test\"]\ntrust_level = \"trusted\"\n"
+        let configuration = try makeConfiguration(text, permissions: 0o666)
+        XCTAssertThrowsError(try makeIsolation().prepare())
+
+        try FileManager.default.removeItem(at: configuration)
+        let otherConfiguration = testRoot.appendingPathComponent("other-config.toml")
+        try text.write(to: otherConfiguration, atomically: false, encoding: .utf8)
+        try setPermissions(0o600, for: otherConfiguration)
+        try FileManager.default.createSymbolicLink(at: configuration, withDestinationURL: otherConfiguration)
+        XCTAssertThrowsError(try makeIsolation().prepare())
     }
 
     func testPrepareRejectsUnexpectedAuthenticationSymlink() throws {
@@ -131,6 +185,18 @@ final class CodexHomeIsolationTests: XCTestCase {
         )
         try Data("{}".utf8).write(to: sharedAuthentication)
         try setPermissions(0o600, for: sharedAuthentication)
+    }
+
+    private func makeConfiguration(_ text: String, permissions: Int = 0o600) throws -> URL {
+        try FileManager.default.createDirectory(
+            at: privateHome,
+            withIntermediateDirectories: true,
+            attributes: [.posixPermissions: 0o700]
+        )
+        let configuration = privateHome.appendingPathComponent("config.toml")
+        try text.write(to: configuration, atomically: false, encoding: .utf8)
+        try setPermissions(permissions, for: configuration)
+        return configuration
     }
 
     private func setPermissions(_ permissions: Int, for url: URL) throws {

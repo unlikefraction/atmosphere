@@ -17,6 +17,9 @@ final class ProjectSmokeTests: XCTestCase {
         XCTAssertNotNil(
             Bundle.main.object(forInfoDictionaryKey: "NSScreenCaptureUsageDescription") as? String
         )
+        XCTAssertNotNil(
+            Bundle.main.object(forInfoDictionaryKey: "NSAppleEventsUsageDescription") as? String
+        )
     }
 
     @MainActor

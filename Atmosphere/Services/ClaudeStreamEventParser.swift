@@ -94,7 +94,7 @@ enum ClaudeStreamEventParser {
                             turnID: turnID,
                             itemID: itemID,
                             kind: .localContext,
-                            message: "Looking at the operating folder"
+                            message: "Running local tools"
                         )
                     )
                 default:

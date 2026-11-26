@@ -22,6 +22,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSUIElement</key>
 	<true/>
+	<key>NSAppleEventsUsageDescription</key>
+	<string>Atmosphere controls other apps when you ask it to perform tasks on your Mac.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Atmosphere records only while voice input is active so Deepgram can turn your speech into a message.</string>
 	<key>NSScreenCaptureUsageDescription</key>

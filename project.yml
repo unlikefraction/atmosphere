@@ -33,6 +33,7 @@ targets:
       path: Atmosphere/Info.plist
       properties:
         LSUIElement: true
+        NSAppleEventsUsageDescription: "Atmosphere controls other apps when you ask it to perform tasks on your Mac."
         NSMicrophoneUsageDescription: "Atmosphere records only while voice input is active so Deepgram can turn your speech into a message."
         NSScreenCaptureUsageDescription: "Atmosphere captures the current display only when you press backtick, excluding its own overlay, so you can attach visual context to a message."
         CFBundleIconFile: AppIcon
@@ -42,8 +43,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.unlikefraction.atmosphere
         PRODUCT_NAME: Atmosphere
-        MARKETING_VERSION: "0.4.0"
-        CURRENT_PROJECT_VERSION: "13"
+        MARKETING_VERSION: "0.5.0"
+        CURRENT_PROJECT_VERSION: "15"
         GENERATE_INFOPLIST_FILE: NO
         ENABLE_APP_SANDBOX: NO
         # Notarization requires the hardened runtime, and the runtime requires

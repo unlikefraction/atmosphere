@@ -45,10 +45,12 @@ For each child-process connection, the overlay follows this lifecycle:
 2. After the response, send the `initialized` notification. No other method may run before this handshake.
 3. Complete the account check/login flow described above.
 4. Call `thread/start` for a new ephemeral conversation, explicitly pinning
-   `gpt-5.6-luna`, medium reasoning effort, and concise reasoning summaries.
+   the default `gpt-6.1-terra` model, medium reasoning effort, and concise reasoning summaries.
    The thread uses the user's persisted operating folder when selected, or a
-   neutral private application-support directory otherwise. It always uses a
-   read-only sandbox and `never` approval policy. Changing or removing the
+   user's home folder otherwise. It uses `danger-full-access` and the `never`
+   approval policy so local tools can run commands, edit files, and access the
+   network as the macOS user. The folder is the working directory, not an
+   access boundary; macOS privacy permissions still apply. Changing or removing the
    operating folder replaces the thread so one thread never spans two folders.
 5. For each submitted message, call `turn/start` with the thread ID and an input
    array. Text uses `{ "type": "text", "text": "..." }`; each pending private
@@ -63,20 +65,26 @@ For each child-process connection, the overlay follows this lifecycle:
    answer text to the Markdown view, finalize items on `item/completed`, and
    mark the request finished only on `turn/completed`.
 7. Use `turn/interrupt` when the user cancels generation.
-8. Reject unsupported server-initiated requests with a JSON-RPC error; never silently approve filesystem, command, network, or other consequential actions merely because the UI is compact.
+8. Reject unsupported server-initiated requests with a JSON-RPC error. Local execution is authorized by the explicit full-access configuration rather than an automatic approval handler.
 
 Atmosphere launches App Server with an isolated Codex home at
 `~/.atmosphere/codex-home` and shares only the user's private ChatGPT
 authentication file. App Server config maps deep-merge, so an empty
 `mcp_servers` override alone would not remove servers configured in the normal
 Codex home. The separate home prevents Atmosphere from inheriting MCP servers,
-plugins, hooks, or project-trust configuration at all. Process and per-thread
-configuration additionally disable Computer Use, code mode, browser control,
-web search, connected apps, plugins, and subagents. This keeps the overlay
-single-agent and prevents an answer from moving the pointer or opening a
-control surface. The built-in shell remains available only inside the read-only
-sandbox for relevant operating-folder inspection, and login-shell semantics
-are disabled.
+plugins, or hooks from that user config. The private home accepts only
+Codex-generated project-trust settings, so a successful full-access launch
+does not block the next startup. Process and per-thread
+configuration additionally disable Computer Use, browser control,
+connected apps, plugins, subagents, and the optional code-mode surface. Web
+search is the deliberate exception: both surfaces set `web_search` to `live`
+(the `WebSearchMode` enum is `disabled`, `cached`, `indexed`, or `live`) so the
+model can answer from current sources. It is read-only and grants none of the
+local control the other surfaces would. The
+bundled local code-mode host stays enabled for built-in shell calls; it does
+not provide GUI control. Local shell commands, file changes, and network access
+are available under the explicit full-access policy. Login-shell semantics are
+disabled.
 
 The prototype stays on the non-experimental surface by setting `experimentalApi` to `false`. Protocol concepts, message shapes, lifecycle, and event names are documented in [Codex App Server](https://learn.chatgpt.com/docs/app-server).
 

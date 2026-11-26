@@ -131,7 +131,34 @@ final class CodexJSONRPCEventParserTests: XCTestCase {
         )
     }
 
-    func testThreadStartParametersPinLunaMediumAndConciseSummary() throws {
+    func testConversationWorkingDirectoryDefaultsToHome() async throws {
+        let client = CodexAppServerClient()
+        let directory = try await client.conversationWorkingDirectory()
+
+        XCTAssertEqual(directory, FileManager.default.homeDirectoryForCurrentUser.standardizedFileURL)
+    }
+
+    func testSelectedWorkingDirectoryIsUsedAndRevalidated() async throws {
+        let client = CodexAppServerClient()
+        let directory = FileManager.default.temporaryDirectory
+            .appendingPathComponent("AtmosphereCodexCWD-\(UUID().uuidString)", isDirectory: true)
+        try FileManager.default.createDirectory(at: directory, withIntermediateDirectories: false)
+        defer { try? FileManager.default.removeItem(at: directory) }
+        await client.setWorkingDirectory(directory)
+
+        let selected = try await client.conversationWorkingDirectory()
+        XCTAssertEqual(selected, directory.standardizedFileURL)
+
+        try FileManager.default.removeItem(at: directory)
+        do {
+            _ = try await client.conversationWorkingDirectory()
+            XCTFail("A removed folder must fail instead of running in another directory")
+        } catch {
+            XCTAssertEqual(error as? WorkingDirectoryPreferenceError, .doesNotExist(directory.path))
+        }
+    }
+
+    func testThreadStartParametersPinTerraMediumAndConciseSummary() throws {
         let directory = URL(fileURLWithPath: "/tmp/atmosphere-assistant")
         let params = CodexAppServerRequestBuilder.threadStartParameters(
             workingDirectory: directory,
@@ -143,22 +170,23 @@ final class CodexJSONRPCEventParserTests: XCTestCase {
         let apps = try XCTUnwrap(config["apps"] as? JSONObject)
         let defaultApp = try XCTUnwrap(apps["_default"] as? JSONObject)
 
-        XCTAssertEqual(params["model"] as? String, "gpt-5.6-luna")
+        XCTAssertEqual(params["model"] as? String, "gpt-6.1-terra")
         XCTAssertEqual(config["model_reasoning_effort"] as? String, "medium")
         XCTAssertEqual(config["model_reasoning_summary"] as? String, "concise")
-        XCTAssertEqual(config["allow_login_shell"] as? Bool, false)
-        XCTAssertEqual(config["web_search"] as? String, "disabled")
+        XCTAssertEqual(config["allow_login_shell"] as? Bool, true)
+        XCTAssertEqual(config["web_search"] as? String, "live")
         XCTAssertEqual(agents["enabled"] as? Bool, false)
         XCTAssertEqual(defaultApp["enabled"] as? Bool, false)
         XCTAssertEqual(features["apps"] as? Bool, false)
         XCTAssertEqual(features["plugins"] as? Bool, false)
         XCTAssertEqual(features["multi_agent"] as? Bool, false)
         XCTAssertEqual(features["code_mode"] as? Bool, false)
+        XCTAssertEqual(features["code_mode_host"] as? Bool, true)
         XCTAssertEqual(features["code_mode_only"] as? Bool, false)
         XCTAssertEqual(features["computer_use"] as? Bool, false)
         XCTAssertEqual(features["browser_use"] as? Bool, false)
         XCTAssertEqual(params["cwd"] as? String, directory.path)
-        XCTAssertEqual(params["sandbox"] as? String, "read-only")
+        XCTAssertEqual(params["sandbox"] as? String, "danger-full-access")
         XCTAssertEqual(params["approvalPolicy"] as? String, "never")
         XCTAssertEqual(params["developerInstructions"] as? String, "Be concise.")
     }
@@ -172,9 +200,12 @@ final class CodexJSONRPCEventParserTests: XCTestCase {
         XCTAssertTrue(arguments.contains("features.plugins=false"))
         XCTAssertTrue(arguments.contains("features.multi_agent=false"))
         XCTAssertTrue(arguments.contains("features.code_mode=false"))
+        XCTAssertTrue(arguments.contains("features.code_mode_host=true"))
+        XCTAssertFalse(arguments.contains("features.code_mode_host=false"))
         XCTAssertTrue(arguments.contains("features.code_mode_only=false"))
         XCTAssertTrue(arguments.contains("mcp_servers={}"))
-        XCTAssertTrue(arguments.contains("web_search=\"disabled\""))
+        XCTAssertTrue(arguments.contains("web_search=\"live\""))
+        XCTAssertFalse(arguments.contains("web_search=\"disabled\""))
     }
 
     func testTurnStartParametersReassertPinnedModelEffortAndSummary() throws {
@@ -188,11 +219,13 @@ final class CodexJSONRPCEventParserTests: XCTestCase {
         let sandbox = try XCTUnwrap(params["sandboxPolicy"] as? JSONObject)
 
         XCTAssertEqual(params["threadId"] as? String, "thread-1")
-        XCTAssertEqual(params["model"] as? String, "gpt-5.6-luna")
+        XCTAssertEqual(params["cwd"] as? String, directory.path)
+        XCTAssertEqual(params["approvalPolicy"] as? String, "never")
+        XCTAssertEqual(params["model"] as? String, "gpt-6.1-terra")
         XCTAssertEqual(params["effort"] as? String, "medium")
         XCTAssertEqual(params["summary"] as? String, "concise")
-        XCTAssertEqual(sandbox["type"] as? String, "readOnly")
-        XCTAssertEqual(sandbox["networkAccess"] as? Bool, false)
+        XCTAssertEqual(sandbox["type"] as? String, "dangerFullAccess")
+        XCTAssertNil(sandbox["networkAccess"])
         XCTAssertEqual((params["input"] as? [JSONObject])?.count, 1)
     }
 
@@ -257,7 +290,7 @@ final class CodexJSONRPCEventParserTests: XCTestCase {
                     turnID: "turn-1",
                     itemID: "command-1",
                     kind: .localContext,
-                    message: "Checking local context"
+                    message: "Running local tools"
                 )
             )
         )

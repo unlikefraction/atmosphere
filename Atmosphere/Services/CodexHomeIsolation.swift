@@ -21,13 +21,14 @@ enum CodexHomeIsolationError: Error, Equatable, LocalizedError {
     }
 }
 
-/// Gives Atmosphere a Codex home that contains authentication only.
+/// Gives Atmosphere a Codex home separate from the user's tool configuration.
 ///
 /// The normal Codex home can contain user-installed MCP servers and plugins.
 /// App Server configuration layers deep-merge those maps, so an empty override
 /// is not sufficient to remove them. A separate home is the security boundary:
 /// Atmosphere can share the user's ChatGPT sign-in without inheriting any tool
-/// server, plugin, hook, instruction, or project-trust configuration.
+/// server, plugin, hook, or instruction configuration. Codex may persist its
+/// own project-trust metadata in this home.
 struct CodexHomeIsolation {
     static var defaultPrivateHomeURL: URL {
         FileManager.default.homeDirectoryForCurrentUser
@@ -59,11 +60,9 @@ struct CodexHomeIsolation {
         try ensurePrivateDirectory(at: atmosphereDirectory, fileManager: fileManager)
         try ensurePrivateDirectory(at: privateHomeURL, fileManager: fileManager)
 
-        // Loading even a locally added config would make the no-MCP guarantee
-        // dependent on mutable external state. Fail closed instead.
         let configurationURL = privateHomeURL.appendingPathComponent("config.toml")
-        if try nodeStatus(at: configurationURL) != nil {
-            throw CodexHomeIsolationError.unexpectedConfiguration(configurationURL.path)
+        if let configurationStatus = try nodeStatus(at: configurationURL) {
+            try validateProjectTrustConfiguration(at: configurationURL, status: configurationStatus)
         }
 
         let isolatedAuthenticationURL = privateHomeURL.appendingPathComponent("auth.json")
@@ -95,7 +94,28 @@ struct CodexHomeIsolation {
         let preparedHome = try prepare(fileManager: fileManager)
         var isolatedEnvironment = environment
         isolatedEnvironment["CODEX_HOME"] = preparedHome.path
+        let toolPaths = [
+            fileManager.homeDirectoryForCurrentUser.appendingPathComponent(".local/bin").path,
+            "/opt/homebrew/bin", "/usr/local/bin", "/usr/bin", "/bin", "/usr/sbin", "/sbin"
+        ]
+        let inheritedPaths = (environment["PATH"] ?? "").split(separator: ":").map(String.init)
+        var seen = Set<String>()
+        isolatedEnvironment["PATH"] = (inheritedPaths + toolPaths)
+            .filter { seen.insert($0).inserted }.joined(separator: ":")
         return isolatedEnvironment
+    }
+
+    private func validateProjectTrustConfiguration(at url: URL, status: stat) throws {
+        // Codex writes trust metadata itself; permit only that generated shape,
+        // never arbitrary settings that could introduce tools or plugins.
+        let trustConfiguration = #"\A(?:[ \t\r\n]*\[projects\."(?:[^"\\\x00-\x1F]|\\["\\bfnrt]|\\u[0-9a-fA-F]{4})+"\][ \t]*\r?\n[ \t]*trust_level[ \t]*=[ \t]*"(?:trusted|untrusted)"[ \t]*(?:\r?\n|\z))*[ \t\r\n]*\z"#
+        guard status.st_mode & S_IFMT == S_IFREG,
+              status.st_uid == geteuid(),
+              status.st_mode & 0o022 == 0,
+              let configuration = try? String(contentsOf: url, encoding: .utf8),
+              configuration.range(of: trustConfiguration, options: .regularExpression) != nil else {
+            throw CodexHomeIsolationError.unexpectedConfiguration(url.path)
+        }
     }
 
     private func ensurePrivateDirectory(

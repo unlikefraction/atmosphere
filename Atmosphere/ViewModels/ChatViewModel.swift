@@ -59,6 +59,12 @@ final class ChatViewModel: ObservableObject {
     private var shortcutRegistrationMessage: String?
     private var workingDirectoryPreferenceError: String?
     private var isStartingClient = false
+    private var reconnectTask: Task<Void, Never>?
+    private var reconnectAttempt = 0
+    private var isShuttingDown = false
+    private var shouldReconnect = true
+    private var interruptedTask = false
+    private let reconnectDelay: TimeInterval
     @Published private var activeThreadID: String?
     private var activeTurnID: String?
     private var activeSubmissionToken: UUID?
@@ -84,23 +90,25 @@ final class ChatViewModel: ObservableObject {
     /// than holding a backend, so switching models cannot leave a stale
     /// reference behind mid-turn.
     private var client: any AssistantBackend {
-        backends[activeModel] ?? backends[.gptLuna]!
+        backends[activeModel] ?? backends[.gptTerra]!
     }
 
     init(
-        client: CodexAppServerClient = CodexAppServerClient(),
+        client: any AssistantBackend = CodexAppServerClient(),
         claudeClient: ClaudeCodeClient = ClaudeCodeClient(),
         modelPreference: AssistantModelPreference = AssistantModelPreference(),
         microphoneRecorder: MicrophoneRecorder = MicrophoneRecorder(),
         transcriptionClient: DeepgramTranscriptionClient = DeepgramTranscriptionClient(),
-        workingDirectoryPreference: WorkingDirectoryPreference = WorkingDirectoryPreference()
+        workingDirectoryPreference: WorkingDirectoryPreference = WorkingDirectoryPreference(),
+        reconnectDelay: TimeInterval = 1
     ) {
-        backends = [.gptLuna: client, .claudeOpus: claudeClient]
+        backends = [.gptTerra: client, .claudeOpus: claudeClient]
         self.modelPreference = modelPreference
         activeModel = modelPreference.value()
         self.microphoneRecorder = microphoneRecorder
         self.transcriptionClient = transcriptionClient
         self.workingDirectoryPreference = workingDirectoryPreference
+        self.reconnectDelay = reconnectDelay
         do {
             selectedWorkingDirectory = try workingDirectoryPreference.selectedDirectory()
         } catch {
@@ -124,7 +132,13 @@ final class ChatViewModel: ObservableObject {
         guard target != activeModel, !isSwitchingModel, !isStartingClient else { return }
 
         isSwitchingModel = true
-        defer { isSwitchingModel = false }
+        defer {
+            isSwitchingModel = false
+            if connectionStatus == .failed { scheduleReconnect() }
+        }
+        reconnectTask?.cancel()
+        reconnectTask = nil
+        reconnectAttempt = 0
 
         invalidateVoiceInput()
         await cancelVoiceRecording()
@@ -179,7 +193,10 @@ final class ChatViewModel: ObservableObject {
     }
 
     func connect() async {
-        guard !isConnecting else { return }
+        guard !isConnecting, !isStartingClient, !isShuttingDown else { return }
+        reconnectTask?.cancel()
+        reconnectTask = nil
+        shouldReconnect = true
 
         isStartingClient = true
         isConnecting = true
@@ -194,8 +211,10 @@ final class ChatViewModel: ObservableObject {
         do {
             await client.setWorkingDirectory(selectedWorkingDirectory)
             let account = try await client.start()
+            guard !isShuttingDown else { return }
             apply(account)
         } catch {
+            guard !isShuttingDown else { return }
             applyConnectionFailure(error)
         }
     }
@@ -257,6 +276,7 @@ final class ChatViewModel: ObservableObject {
         isGenerating = true
         modelActivityText = "Thinking…"
         errorMessage = nil
+        interruptedTask = false
         clearInputError()
 
         Task {
@@ -273,6 +293,15 @@ final class ChatViewModel: ObservableObject {
             } catch {
                 if activeSubmissionToken == submissionToken {
                     finishGenerationWithError(error.localizedDescription)
+                    if let error = error as? CodexAppServerError {
+                        switch error {
+                        case .notConnected, .connectionClosed, .requestTimedOut:
+                            interruptedTask = true
+                            applyConnectionFailure(error)
+                        default:
+                            break
+                        }
+                    }
                 }
             }
         }
@@ -618,6 +647,9 @@ final class ChatViewModel: ObservableObject {
     }
 
     func shutdown() async {
+        isShuttingDown = true
+        reconnectTask?.cancel()
+        reconnectTask = nil
         loginTimeoutTask?.cancel()
         loginTimeoutTask = nil
         eventTasks.forEach { $0.cancel() }
@@ -767,6 +799,7 @@ final class ChatViewModel: ObservableObject {
         case .stopped:
             connectionStatus = .disconnected
             activeThreadID = nil
+            scheduleReconnect()
         case .starting:
             connectionStatus = .connecting
         case .ready:
@@ -779,18 +812,27 @@ final class ChatViewModel: ObservableObject {
             activeThreadID = nil
             errorMessage = message
             if isGenerating {
+                interruptedTask = true
                 finishGenerationWithError(message)
+            }
+            if !isStartingClient {
+                scheduleReconnect()
             }
         }
     }
 
     private func apply(_ account: AssistantAccountStatus) {
         if account.canStartConversation {
+            reconnectTask?.cancel()
+            reconnectTask = nil
+            reconnectAttempt = 0
             loginTimeoutTask?.cancel()
             loginTimeoutTask = nil
             requiresAuthentication = false
             connectionStatus = .connected
-            errorMessage = workingDirectoryPreferenceError ?? shortcutRegistrationMessage
+            errorMessage = interruptedTask
+                ? "Connection restored. The previous task was interrupted and may be partly complete."
+                : workingDirectoryPreferenceError ?? shortcutRegistrationMessage
         } else {
             // Losing authentication also invalidates the server-side turn.
             // Finish the matching local generation immediately because its
@@ -803,14 +845,48 @@ final class ChatViewModel: ObservableObject {
             activeThreadID = nil
             requiresAuthentication = true
             connectionStatus = .authenticationRequired
+            reconnectTask?.cancel()
+            reconnectTask = nil
         }
     }
 
     private func applyConnectionFailure(_ error: Error) {
+        if error as? CodexAppServerError == .authenticationRequired {
+            apply(AssistantAccountStatus(account: nil, requiresOpenAIAuth: true))
+            return
+        }
         requiresAuthentication = false
         activeThreadID = nil
         connectionStatus = .failed
         errorMessage = error.localizedDescription
+        if error is CodexHomeIsolationError || error is WorkingDirectoryPreferenceError {
+            shouldReconnect = false
+            reconnectTask?.cancel()
+            reconnectTask = nil
+        } else if case CodexAppServerError.executableNotFound = error {
+            shouldReconnect = false
+            reconnectTask?.cancel()
+            reconnectTask = nil
+        } else {
+            scheduleReconnect()
+        }
+    }
+
+    private func scheduleReconnect() {
+        guard activeModel == .gptTerra, shouldReconnect, !isShuttingDown, !isSwitchingModel,
+              !requiresAuthentication, connectionStatus != .connected,
+              reconnectTask == nil else { return }
+        let delay = min(30, reconnectDelay * pow(2, Double(min(reconnectAttempt, 5))))
+        reconnectAttempt += 1
+        reconnectTask = Task { [weak self] in
+            do {
+                try await Task.sleep(nanoseconds: UInt64(max(0, delay) * 1_000_000_000))
+            } catch { return }
+            guard let self, !Task.isCancelled, !self.isShuttingDown,
+                  self.activeModel == .gptTerra else { return }
+            self.reconnectTask = nil
+            await self.connect()
+        }
     }
 
     private func append(delta: String, itemID: String) {
@@ -900,6 +976,9 @@ final class ChatViewModel: ObservableObject {
         isGenerating = false
         modelActivityText = nil
         errorMessage = message
+        for index in messages.indices where messages[index].isStreaming {
+            messages[index].isStreaming = false
+        }
 
         if let pendingAssistantMessageID,
            let index = messages.firstIndex(where: { $0.id == pendingAssistantMessageID }),
@@ -939,6 +1018,7 @@ final class ChatViewModel: ObservableObject {
     }
 
     private func clearLocalConversation() {
+        interruptedTask = false
         discardScreenshotFiles()
         messages.removeAll()
         pendingAttachments.removeAll()

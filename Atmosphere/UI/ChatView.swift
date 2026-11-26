@@ -673,9 +673,11 @@ private struct FooterBar: View {
                 .foregroundStyle(Atmo.Palette.tertiary)
                 .help(skyPhase.greeting)
                 .accessibilityLabel(skyPhase.greeting)
+                .allowsHitTesting(false)
 
             ConnectionDot(status: viewModel.connectionStatus)
                 .help("\(viewModel.activeModel.providerName): \(viewModel.connectionStatus.label)")
+                .allowsHitTesting(false)
 
             if showsCopyConfirmation {
                 Label("Copied", systemImage: "checkmark")
@@ -683,6 +685,7 @@ private struct FooterBar: View {
                     .foregroundStyle(Atmo.Palette.ready)
                     .fixedSize()
                     .transition(.opacity)
+                    .allowsHitTesting(false)
             } else {
                 Button {
                     onSwitchModel()
@@ -739,6 +742,7 @@ private struct FooterBar: View {
                 }
                 .transition(.opacity)
                 .layoutPriority(-1)
+                .allowsHitTesting(false)
             }
 
             Button {
@@ -786,7 +790,11 @@ private struct FooterBar: View {
         }
         .padding(.horizontal, Atmo.Metric.gutter)
         .frame(height: Atmo.Metric.footerHeight)
-        .background(Color.primary.opacity(0.035))
+        .background {
+            OverlayWindowDragArea()
+                .background(Color.primary.opacity(0.035))
+                .accessibilityHidden(true)
+        }
     }
 }
 
@@ -849,7 +857,7 @@ private struct FolderChip: View {
             }
             .buttonStyle(AtmoFooterButtonStyle())
             .disabled(!isEnabled || isWorking)
-            .help(directory?.path ?? "Choose a folder Atmosphere can inspect read-only  ⌘O")
+            .help(directory?.path ?? "Choose a folder to run commands and edit files in  ⌘O")
             .accessibilityLabel(
                 directory.map { "Change operating folder, \($0.lastPathComponent)" }
                     ?? "Choose operating folder"

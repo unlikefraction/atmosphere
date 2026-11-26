@@ -48,13 +48,8 @@ actor ClaudeCodeClient {
     nonisolated let activityEvents: AsyncStream<AssistantActivity>
 
     private static let systemPrompt = """
-    You are Atmosphere, a concise general-purpose assistant in a small macOS overlay. Answer the user's question directly in plain language, formatted as Markdown. Prefer short, self-contained answers unless the user asks for more detail. When it is relevant to the question, you may read files inside the operating folder with your read-only tools. Never create, edit, delete, move, or rename files, and never take actions outside answering. Say when current information cannot be verified.
+    You are Atmosphere, a concise general-purpose assistant in a small macOS overlay. Answer the user's question directly in plain language, formatted as Markdown. Prefer short, self-contained answers unless the user asks for more detail. Use your local tools to complete the user's requests, including running commands and creating, editing, or deleting files when needed. Start commands in the operating folder; it is a working directory, not a boundary on access. Verify actions before reporting success. Search the web when an answer depends on current information, then cite what you found. Say when current information cannot be verified.
     """
-
-    /// Read-only tools only. The launch also passes
-    /// `--dangerously-skip-permissions`, so this list — not a prompt — is what
-    /// keeps an answer from touching the user's machine.
-    private static let allowedTools = "Read,Grep,Glob"
 
     private let eventContinuation: AsyncStream<AssistantEvent>.Continuation
     private let activityContinuation: AsyncStream<AssistantActivity>.Continuation
@@ -285,9 +280,7 @@ actor ClaudeCodeClient {
 
     /// The launch arguments, as a pure function so the contract is testable.
     ///
-    /// `--strict-mcp-config` with no config keeps the user's MCP servers,
-    /// plugins, and their tools out of a session that only has to answer a
-    /// question.
+    /// Keep MCP servers separate from Atmosphere's built-in local tools.
     static func arguments(sessionID: String, resuming: Bool) -> [String] {
         var arguments = [
             "--print",
@@ -300,7 +293,8 @@ actor ClaudeCodeClient {
             "--dangerously-skip-permissions",
             "--strict-mcp-config",
             "--disable-slash-commands",
-            "--tools", allowedTools,
+            "--tools", "default",
+            "--settings", #"{"sandbox":{"enabled":false}}"#,
             "--append-system-prompt", systemPrompt
         ]
         arguments.append(contentsOf: resuming ? ["--resume", sessionID] : ["--session-id", sessionID])
@@ -317,7 +311,7 @@ actor ClaudeCodeClient {
 
         process.executableURL = executableURL
         process.arguments = Self.arguments(sessionID: sessionID, resuming: resuming)
-        process.currentDirectoryURL = preferredWorkingDirectory ?? Self.neutralWorkingDirectory()
+        process.currentDirectoryURL = try Self.workingDirectory(preferredWorkingDirectory)
 
         var environment = ProcessInfo.processInfo.environment
         // An app bundle's PATH does not include the usual CLI locations, and
@@ -398,16 +392,10 @@ actor ClaudeCodeClient {
         }
     }
 
-    /// Where a session runs when the user has not chosen an operating folder:
-    /// a private, empty directory rather than the home folder.
-    private static func neutralWorkingDirectory() -> URL {
-        let base = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask)
-            .first ?? FileManager.default.temporaryDirectory
-        let directory = base
-            .appendingPathComponent("Atmosphere", isDirectory: true)
-            .appendingPathComponent("ClaudeWorkspace", isDirectory: true)
-        try? FileManager.default.createDirectory(at: directory, withIntermediateDirectories: true)
-        return directory
+    static func workingDirectory(_ selectedDirectory: URL?) throws -> URL {
+        try WorkingDirectoryPreference().validate(
+            selectedDirectory ?? FileManager.default.homeDirectoryForCurrentUser
+        )
     }
 
     private func restartProcess(resumingSession: Bool) {

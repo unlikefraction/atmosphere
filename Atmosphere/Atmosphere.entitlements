@@ -7,5 +7,8 @@
 	     alone and needs no entitlement. -->
 	<key>com.apple.security.device.audio-input</key>
 	<true/>
+	<!-- Local commands can automate apps at the user's request. -->
+	<key>com.apple.security.automation.apple-events</key>
+	<true/>
 </dict>
 </plist>

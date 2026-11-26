@@ -71,6 +71,8 @@ final class OverlayController {
             onQuit: { NSApp.terminate(nil) }
         )
         let hostingView = NSHostingView(rootView: rootView)
+        // The controller owns panel sizing; hosting constraints would resize it again during recovery.
+        hostingView.sizingOptions = []
         // The panel is borderless and transparent, so nothing below SwiftUI may
         // paint its own rectangle: an unclipped backing layer shows up as a
         // squared-off slab peeking out from under the rounded corners.
@@ -297,7 +299,7 @@ final class OverlayController {
 
         let openPanel = NSOpenPanel()
         openPanel.title = "Choose Operating Folder"
-        openPanel.message = "Atmosphere can inspect this folder read-only when a question needs more context."
+        openPanel.message = "Atmosphere starts commands in this folder and can read and edit files on your Mac."
         openPanel.prompt = "Use Folder"
         openPanel.canChooseFiles = false
         openPanel.canChooseDirectories = true

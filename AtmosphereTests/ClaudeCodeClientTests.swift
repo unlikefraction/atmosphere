@@ -158,13 +158,40 @@ final class ClaudeCodeClientLaunchTests: XCTestCase {
         XCTAssertEqual(value(after: "--effort", in: arguments), "low")
     }
 
-    func testPermissionSkippingIsPairedWithReadOnlyTools() {
+    func testLaunchEnablesLocalToolsAndUnsandboxedCommands() throws {
         let arguments = ClaudeCodeClient.arguments(sessionID: "abc", resuming: false)
-        let tools = value(after: "--tools", in: arguments)?.split(separator: ",").map(String.init)
 
-        XCTAssertEqual(tools?.sorted(), ["Glob", "Grep", "Read"])
-        for forbidden in ["Bash", "Write", "Edit"] {
-            XCTAssertFalse(tools?.contains(forbidden) ?? true, forbidden)
+        XCTAssertTrue(arguments.contains("--dangerously-skip-permissions"))
+        XCTAssertEqual(value(after: "--tools", in: arguments), "default")
+        let settings = try XCTUnwrap(value(after: "--settings", in: arguments))
+        let object = try XCTUnwrap(
+            JSONSerialization.jsonObject(with: Data(settings.utf8)) as? [String: Any]
+        )
+        XCTAssertEqual((object["sandbox"] as? [String: Any])?["enabled"] as? Bool, false)
+        let prompt = try XCTUnwrap(value(after: "--append-system-prompt", in: arguments))
+        XCTAssertTrue(prompt.contains("running commands"))
+    }
+
+    func testWorkingDirectoryUsesSelectedFolderOrHome() throws {
+        let selected = FileManager.default.temporaryDirectory
+        XCTAssertEqual(
+            try ClaudeCodeClient.workingDirectory(selected),
+            selected.standardizedFileURL
+        )
+        XCTAssertEqual(
+            try ClaudeCodeClient.workingDirectory(nil),
+            FileManager.default.homeDirectoryForCurrentUser.standardizedFileURL
+        )
+    }
+
+    func testWorkingDirectoryRejectsMissingFolder() {
+        let missing = FileManager.default.temporaryDirectory
+            .appendingPathComponent(UUID().uuidString, isDirectory: true)
+        XCTAssertThrowsError(try ClaudeCodeClient.workingDirectory(missing)) { error in
+            XCTAssertEqual(
+                error as? WorkingDirectoryPreferenceError,
+                .doesNotExist(missing.standardizedFileURL.path)
+            )
         }
     }
 
@@ -212,13 +239,13 @@ final class ClaudeCodeClientLaunchTests: XCTestCase {
 }
 
 final class AssistantModelPreferenceTests: XCTestCase {
-    func testDefaultsToLunaAndRoundTripsTheChoice() {
+    func testDefaultsToTerraAndRoundTripsTheChoice() {
         let suite = "AssistantModel-\(UUID().uuidString)"
         let defaults = UserDefaults(suiteName: suite)!
         defer { defaults.removePersistentDomain(forName: suite) }
         let preference = AssistantModelPreference(userDefaults: defaults)
 
-        XCTAssertEqual(preference.value(), .gptLuna)
+        XCTAssertEqual(preference.value(), .gptTerra)
 
         preference.save(.claudeOpus)
 
@@ -232,11 +259,11 @@ final class AssistantModelPreferenceTests: XCTestCase {
         defer { defaults.removePersistentDomain(forName: suite) }
         defaults.set("gemini", forKey: AssistantModelPreference.defaultStorageKey)
 
-        XCTAssertEqual(AssistantModelPreference(userDefaults: defaults).value(), .gptLuna)
+        XCTAssertEqual(AssistantModelPreference(userDefaults: defaults).value(), .gptTerra)
     }
 
     func testSwitchingAlternatesBetweenTheTwoEngines() {
-        XCTAssertEqual(AssistantModel.gptLuna.next, .claudeOpus)
-        XCTAssertEqual(AssistantModel.claudeOpus.next, .gptLuna)
+        XCTAssertEqual(AssistantModel.gptTerra.next, .claudeOpus)
+        XCTAssertEqual(AssistantModel.claudeOpus.next, .gptTerra)
     }
 }

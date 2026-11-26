@@ -54,7 +54,7 @@ reaching for the trackpad.
 
 | Model | Runs through |
 | --- | --- |
-| **GPT‑5.6 Luna** · medium reasoning | the Codex app server bundled with the ChatGPT app |
+| **GPT‑6.1 Terra** · medium reasoning · default | the installed Codex app server, using ChatGPT sign-in |
 | **Claude Opus 5** · light thinking | the Claude Code CLI |
 
 Both are local, first-party command-line tools that you are **already signed in
@@ -62,8 +62,11 @@ to**. Atmosphere never asks for an API key, never stores a token, and never
 touches your credentials — it starts the tool you already have and reads its
 output.
 
-Point it at a folder and either model can read files in it — read-only, always.
-Neither can write, delete, or run commands.
+Either model can run commands, edit files, and use the network as your macOS
+user. A selected folder is the starting working directory; without one,
+commands start in your home folder. macOS privacy permissions still apply.
+Protected folders may need Full Disk Access; app automation may need Automation or Accessibility permission in
+System Settings → Privacy & Security.
 
 <p align="center">
   <img src="Docs/screenshots/shortcuts.png" width="820" alt="The keyboard shortcut sheet">
@@ -139,7 +142,7 @@ no `sudo`, and every step is reversible by deleting the app.
 set -euo pipefail
 tmp="$(mktemp -d)"
 curl -fsSL -o "$tmp/atmosphere.zip" \
-  https://github.com/unlikefraction/atmosphere/releases/latest/download/Atmosphere-0.4.0-macOS.zip
+  https://github.com/unlikefraction/atmosphere/releases/latest/download/Atmosphere-0.5.0-macOS.zip
 ditto -x -k "$tmp/atmosphere.zip" "$tmp"
 rm -rf /Applications/Atmosphere.app
 ditto "$tmp/Atmosphere.app" /Applications/Atmosphere.app
@@ -168,8 +171,8 @@ the supported path.
 
 - macOS 14 (Sonoma) or newer, Apple silicon or Intel
 - At least one answer model:
-  - **GPT‑5.6 Luna** — the [ChatGPT desktop app](https://openai.com/chatgpt/download/),
-    signed in. Atmosphere uses the `codex` runtime inside it.
+  - **GPT‑6.1 Terra** — an installed Codex CLI or the `codex` runtime bundled
+    with the [ChatGPT desktop app](https://openai.com/chatgpt/download/), signed in.
   - **Claude Opus 5** — the [Claude Code CLI](https://claude.com/claude-code),
     signed in (`claude` on your `PATH`).
 - **Voice input is optional** and needs a [Deepgram](https://deepgram.com) API
@@ -254,10 +257,11 @@ refreshes both indicators when the overlay opens and when the app becomes
 active. After the first Screen Recording grant, a `Restart for Screen` chip
 cleanly quits and reopens Atmosphere so the new permission takes effect.
 
-Choose a folder to let Atmosphere inspect it read-only when a question needs
-local context. Click the folder chip again to replace it, use its clear button
-to remove it, or right-click to reveal it in Finder. The selection persists
-across conversations and app launches.
+Choose a folder to set where Atmosphere starts local commands. The folder is
+a working directory, not an access boundary. Click the folder chip again to
+replace it, use its clear button to return to your home folder, or right-click
+to reveal it in Finder. The selection persists across conversations and app
+launches.
 
 The footer also carries 25%, 50%, and 100% opacity choices — by menu or
 `⌘1`/`⌘2`/`⌘3` — so the desktop can remain visible underneath the entire
@@ -339,13 +343,13 @@ newline-delimited JSON, events come back the same way, and the session keeps
 its context between turns.
 
 The session is launched with `--model claude-opus-5 --effort low`,
-`--dangerously-skip-permissions`, and `--tools Read,Grep,Glob`. Those last two
-belong together: because nothing will stop to ask, the tool list — not a
-prompt — is what keeps an answer from touching the machine. There is no Bash,
-no Write, no Edit. `--strict-mcp-config` with no config file keeps the user's
-MCP servers, plugins, and their tools out of a session that only has to answer
-a question. The process runs in the selected operating folder, or in a private
-application-support directory when none is chosen.
+`--dangerously-skip-permissions`, and the default local tools, including Bash,
+Write, Edit, and the `WebSearch` and `WebFetch` tools. It can run commands,
+change files, search the web, and access the network without an approval
+prompt. `--strict-mcp-config` with no config file keeps
+the user's MCP servers and their tools out of the session. The process runs
+in the selected operating folder, or in the user's home folder when none is
+chosen. macOS privacy permissions still apply.
 
 Only generic activity is surfaced — that a tool ran, never which one, with what
 arguments, or what it returned — matching the Codex path. Interrupting a turn
@@ -373,9 +377,11 @@ Executable discovery prefers:
 The app server reuses Codex-managed ChatGPT authentication when available. If
 sign-in is needed, Atmosphere opens the documented managed ChatGPT OAuth flow;
 it never reads or stores the resulting access token itself. Conversations are
-ephemeral, pin `gpt-5.6-luna` with medium reasoning effort, and use a read-only,
-no-approval thread. The thread works in the selected operating folder or, when
-none is selected, a neutral private application-support directory. Atmosphere
+ephemeral, pin the default `gpt-6.1-terra` model with medium reasoning effort,
+and use `danger-full-access` with the `never` approval policy. The model can
+run commands, change files, and access the network as your macOS user. The
+thread works in the selected operating folder or, when none is selected, your
+home folder. macOS privacy permissions still apply. Atmosphere
 shows only documented commentary, concise reasoning summaries, plans, and
 generic tool activity; raw reasoning, command text, arguments, and tool output
 are never exposed.
@@ -383,13 +389,27 @@ are never exposed.
 Atmosphere launches App Server with an isolated Codex home under
 `~/.atmosphere/codex-home`. It links only the private ChatGPT authentication
 file when one already exists; it does not inherit the normal Codex config,
-plugins, MCP servers, hooks, or project-trust state. This prevents configured
-Computer Use or browser helpers from starting while preserving read-only shell
-inspection inside the selected operating folder.
+plugins, MCP servers, or hooks from the normal user config. Codex-generated
+project-trust metadata is accepted on subsequent launches. This prevents configured
+Computer Use or browser helpers from starting. The bundled local code-mode host
+stays enabled for built-in local shell calls. Unrelated connected apps, plugins,
+subagents, Computer Use, and browser integrations remain disabled.
+
+Web search is the one first-party surface that is deliberately on. Both the
+process overrides and the per-thread config set `web_search` to `live`, so the
+model can answer from current sources rather than guessing. It is read-only and
+grants none of the local control that Computer Use or browser control would;
+the panel reports it as *Searching the web*, with queries and results never
+shown.
 
 This is the documented **Codex App Server**, not a generic API for controlling
 the consumer ChatGPT desktop UI. It is version-coupled and currently intended
 for custom Codex clients. See [OpenAI integration details](Docs/OpenAI-Integration.md).
+
+If the local ChatGPT backend exits or its transport times out, Atmosphere
+reconnects automatically with delays capped at 30 seconds. Interrupted requests
+are not replayed, because local actions may already be partly complete. Drag
+the bottom status bar to move the overlay; its buttons remain clickable.
 
 ## Screen-capture privacy: important limitation
 

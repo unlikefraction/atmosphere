@@ -481,7 +481,7 @@ enum CodexJSONRPCActivityParser {
             message = "Thinking through the question"
         case "commandExecution":
             kind = .localContext
-            message = "Checking local context"
+            message = "Running local tools"
         case "mcpToolCall", "dynamicToolCall":
             kind = .connectedSource
             message = "Checking connected information"
@@ -690,7 +690,7 @@ struct AssistantActivityTracker {
 }
 
 enum CodexAppServerRequestBuilder {
-    static let model = "gpt-5.6-luna"
+    static let model = "gpt-6.1-terra"
     static let effort = "medium"
     static let reasoningSummary = "concise"
 
@@ -701,27 +701,28 @@ enum CodexAppServerRequestBuilder {
         [
             "ephemeral": true,
             "cwd": workingDirectory.path,
-            "sandbox": "read-only",
+            "sandbox": "danger-full-access",
             "approvalPolicy": "never",
             "developerInstructions": developerInstructions,
             "model": model,
             "config": [
                 "model_reasoning_effort": effort,
                 "model_reasoning_summary": reasoningSummary,
-                "allow_login_shell": false,
-                "web_search": "disabled",
+                "allow_login_shell": true,
+                "web_search": "live",
                 "agents": ["enabled": false],
                 "apps": ["_default": ["enabled": false]],
                 "features": [
                     "apps": false,
                     "plugins": false,
-                "plugin_sharing": false,
-                "multi_agent": false,
-                "remote_plugin": false,
-                "code_mode": false,
-                "code_mode_host": false,
-                "code_mode_only": false,
-                "goals": false,
+                    "plugin_sharing": false,
+                    "multi_agent": false,
+                    "remote_plugin": false,
+                    "code_mode": false,
+                    // The local host provides the model's shell tools.
+                    "code_mode_host": true,
+                    "code_mode_only": false,
+                    "goals": false,
                     "hooks": false,
                     "skill_search": false,
                     "tool_suggest": false,
@@ -745,10 +746,7 @@ enum CodexAppServerRequestBuilder {
             "input": userInput,
             "cwd": workingDirectory.path,
             "approvalPolicy": "never",
-            "sandboxPolicy": [
-                "type": "readOnly",
-                "networkAccess": false
-            ],
+            "sandboxPolicy": ["type": "dangerFullAccess"],
             "model": model,
             "effort": effort,
             "summary": reasoningSummary
@@ -760,9 +758,14 @@ enum CodexAppServerLaunchConfiguration {
     /// Defense-in-depth process overrides for Atmosphere's isolated Codex home.
     /// The isolated home is what prevents inherited MCP/plugin configuration;
     /// these flags also keep optional first-party tool surfaces unavailable.
+    ///
+    /// Web search is the deliberate exception: `live` is asserted here and in
+    /// the per-thread config so the model can answer from current sources
+    /// instead of guessing. It is a read-only first-party surface and carries
+    /// none of the local control that Computer Use or browser control would.
     static let overrides = [
-        "allow_login_shell=false",
-        "web_search=\"disabled\"",
+        "allow_login_shell=true",
+        "web_search=\"live\"",
         "agents.enabled=false",
         "apps._default.enabled=false",
         "features.apps=false",
@@ -771,7 +774,8 @@ enum CodexAppServerLaunchConfiguration {
         "features.multi_agent=false",
         "features.remote_plugin=false",
         "features.code_mode=false",
-        "features.code_mode_host=false",
+        // The bundled local host provides the model's shell tools.
+        "features.code_mode_host=true",
         "features.code_mode_only=false",
         "features.goals=false",
         "features.hooks=false",
@@ -820,7 +824,7 @@ actor CodexAppServerClient {
     }
 
     private static let generalAssistantInstructions = """
-    You are Atmosphere, a concise general-purpose assistant in a small macOS overlay. Answer the user's question directly in plain language. Prefer short, self-contained answers unless the user asks for more detail. When it is relevant to the question, you may inspect files and directories inside the operating folder with safe read-only tools or commands. Never create, edit, delete, move, or rename files; never change systems or take external actions. Do not use GUI automation, Computer Use, browser-control tools, connected apps, plugins, or subagents. Say when current information cannot be verified.
+    You are Atmosphere, a concise general-purpose assistant in a small macOS overlay. Answer the user's question directly in plain language. Prefer short, self-contained answers unless the user asks for more detail. Carry out requested tasks using local tools: run commands and applications, read and edit files, and access the network as needed. Start commands in the selected operating folder, or the user's home directory when no folder is selected. The operating folder is a starting directory, not a filesystem access limit. Respect macOS permissions. Search the web when an answer depends on current information, then cite what you found. Say when an action fails or current information cannot be verified.
     """
 
     private let configuration: Configuration
@@ -894,7 +898,7 @@ actor CodexAppServerClient {
 
     /// Starts a private official `codex app-server` using the user's existing
     /// Codex/ChatGPT credentials, performs the required handshake, reads the
-    /// account, and creates an in-memory read-only conversation when possible.
+    /// account, and creates an in-memory conversation when possible.
     @discardableResult
     func start() async throws -> AssistantAccountStatus {
         if isInitialized {
@@ -1268,6 +1272,7 @@ actor CodexAppServerClient {
 
         process.executableURL = executableURL
         process.arguments = CodexAppServerLaunchConfiguration.arguments
+        process.currentDirectoryURL = try conversationWorkingDirectory()
         do {
             process.environment = try CodexHomeIsolation().processEnvironment()
         } catch {
@@ -1342,6 +1347,7 @@ actor CodexAppServerClient {
 
     private func request(method: String, params: JSONObject = [:]) async throws -> JSONObject {
         guard process?.isRunning == true, inputHandle != nil else {
+            failConnection(CodexAppServerError.notConnected)
             throw CodexAppServerError.notConnected
         }
 
@@ -1371,6 +1377,7 @@ actor CodexAppServerClient {
                     pending.timeoutTask.cancel()
                     pending.continuation.resume(throwing: error)
                 }
+                failConnection(error)
             }
         }
     }
@@ -1494,11 +1501,9 @@ actor CodexAppServerClient {
     }
 
     private func requestDidTimeOut(id: Int) {
-        guard let pending = pendingRequests.removeValue(forKey: id) else { return }
-        pending.timeoutTask.cancel()
-        pending.continuation.resume(
-            throwing: CodexAppServerError.requestTimedOut(method: pending.method)
-        )
+        guard let pending = pendingRequests[id] else { return }
+        // A hung transport must be replaced; retrying the same process cannot recover it.
+        failConnection(CodexAppServerError.requestTimedOut(method: pending.method))
     }
 
     private func processDidTerminate(generation: UUID, exitCode: Int32) {
@@ -1704,31 +1709,10 @@ actor CodexAppServerClient {
         return newThreadID
     }
 
-    private func conversationWorkingDirectory() throws -> URL {
-        if let preferredWorkingDirectory {
-            return preferredWorkingDirectory
-        }
-
-        let fileManager = FileManager.default
-        let applicationSupport = fileManager.urls(
-            for: .applicationSupportDirectory,
-            in: .userDomainMask
-        ).first ?? fileManager.temporaryDirectory
-        let directory = applicationSupport
-            .appendingPathComponent("Atmosphere", isDirectory: true)
-            .appendingPathComponent("AssistantWorkspace", isDirectory: true)
-
-        do {
-            try fileManager.createDirectory(
-                at: directory,
-                withIntermediateDirectories: true
-            )
-            return directory
-        } catch {
-            throw CodexAppServerError.processLaunchFailed(
-                "could not prepare the private assistant workspace (\(error.localizedDescription))"
-            )
-        }
+    func conversationWorkingDirectory() throws -> URL {
+        try WorkingDirectoryPreference().validate(
+            preferredWorkingDirectory ?? FileManager.default.homeDirectoryForCurrentUser
+        )
     }
 
     private static func parseAccountStatus(_ result: JSONObject) throws -> AssistantAccountStatus {
