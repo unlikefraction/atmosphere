@@ -154,7 +154,7 @@ final class ClaudeCodeClientLaunchTests: XCTestCase {
     func testLaunchPinsOpusAtLightThinking() {
         let arguments = ClaudeCodeClient.arguments(sessionID: "abc", resuming: false)
 
-        XCTAssertEqual(value(after: "--model", in: arguments), "claude-opus-5")
+        XCTAssertEqual(value(after: "--model", in: arguments), "claude-opus-5-5")
         XCTAssertEqual(value(after: "--effort", in: arguments), "low")
     }
 

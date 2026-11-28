@@ -288,7 +288,7 @@ actor ClaudeCodeClient {
             "--output-format", "stream-json",
             "--verbose",
             "--include-partial-messages",
-            "--model", "claude-opus-5",
+            "--model", "claude-opus-5-5",
             "--effort", "low",
             "--dangerously-skip-permissions",
             "--strict-mcp-config",

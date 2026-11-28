@@ -55,7 +55,7 @@ reaching for the trackpad.
 | Model | Runs through |
 | --- | --- |
 | **GPT‑6.1 Terra** · medium reasoning · default | the installed Codex app server, using ChatGPT sign-in |
-| **Claude Opus 5** · light thinking | the Claude Code CLI |
+| **Claude Opus 5.5** · light thinking | the Claude Code CLI |
 
 Both are local, first-party command-line tools that you are **already signed in
 to**. Atmosphere never asks for an API key, never stores a token, and never
@@ -173,7 +173,7 @@ the supported path.
 - At least one answer model:
   - **GPT‑6.1 Terra** — an installed Codex CLI or the `codex` runtime bundled
     with the [ChatGPT desktop app](https://openai.com/chatgpt/download/), signed in.
-  - **Claude Opus 5** — the [Claude Code CLI](https://claude.com/claude-code),
+  - **Claude Opus 5.5** — the [Claude Code CLI](https://claude.com/claude-code),
     signed in (`claude` on your `PATH`).
 - **Voice input is optional** and needs a [Deepgram](https://deepgram.com) API
   key in `~/.atmosphere/deepgram-api-key` — see [Deepgram voice setup](#deepgram-voice-setup).
@@ -342,7 +342,7 @@ question would undo the point of a keyboard-first overlay. Messages go in as
 newline-delimited JSON, events come back the same way, and the session keeps
 its context between turns.
 
-The session is launched with `--model claude-opus-5 --effort low`,
+The session is launched with `--model claude-opus-5-5 --effort low`,
 `--dangerously-skip-permissions`, and the default local tools, including Bash,
 Write, Edit, and the `WebSearch` and `WebFetch` tools. It can run commands,
 change files, search the web, and access the network without an approval

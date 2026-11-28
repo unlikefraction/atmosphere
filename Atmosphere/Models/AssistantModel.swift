@@ -15,14 +15,14 @@ enum AssistantModel: String, CaseIterable, Sendable {
     var shortTitle: String {
         switch self {
         case .gptTerra: return "GPT‑6.1 Terra"
-        case .claudeOpus: return "Claude Opus 5"
+        case .claudeOpus: return "Claude Opus 5.5"
         }
     }
 
     var menuTitle: String {
         switch self {
         case .gptTerra: return "GPT-6.1 Terra · Medium"
-        case .claudeOpus: return "Claude Opus 5 · Light thinking"
+        case .claudeOpus: return "Claude Opus 5.5 · Light thinking"
         }
     }
 
@@ -31,7 +31,7 @@ enum AssistantModel: String, CaseIterable, Sendable {
         case .gptTerra:
             return "Answer model: GPT-6.1 Terra with medium reasoning effort, through the Codex app server. ⌘M switches."
         case .claudeOpus:
-            return "Answer model: Claude Opus 5 with low effort, through the Claude Code CLI. ⌘M switches."
+            return "Answer model: Claude Opus 5.5 with low effort, through the Claude Code CLI. ⌘M switches."
         }
     }
 
