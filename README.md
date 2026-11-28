@@ -142,7 +142,7 @@ no `sudo`, and every step is reversible by deleting the app.
 set -euo pipefail
 tmp="$(mktemp -d)"
 curl -fsSL -o "$tmp/atmosphere.zip" \
-  https://github.com/unlikefraction/atmosphere/releases/latest/download/Atmosphere-0.5.0-macOS.zip
+  https://github.com/unlikefraction/atmosphere/releases/latest/download/Atmosphere-0.5.1-macOS.zip
 ditto -x -k "$tmp/atmosphere.zip" "$tmp"
 rm -rf /Applications/Atmosphere.app
 ditto "$tmp/Atmosphere.app" /Applications/Atmosphere.app

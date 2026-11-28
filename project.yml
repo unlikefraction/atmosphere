@@ -43,8 +43,8 @@ targets:
       base:
         PRODUCT_BUNDLE_IDENTIFIER: com.unlikefraction.atmosphere
         PRODUCT_NAME: Atmosphere
-        MARKETING_VERSION: "0.5.0"
-        CURRENT_PROJECT_VERSION: "15"
+        MARKETING_VERSION: "0.5.1"
+        CURRENT_PROJECT_VERSION: "16"
         GENERATE_INFOPLIST_FILE: NO
         ENABLE_APP_SANDBOX: NO
         # Notarization requires the hardened runtime, and the runtime requires
